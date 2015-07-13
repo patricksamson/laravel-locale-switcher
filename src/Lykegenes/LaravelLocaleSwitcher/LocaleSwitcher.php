@@ -147,16 +147,10 @@ class LocaleSwitcher
      * @param  string  $field
      * @return \Symfony\Component\HttpFoundation\Response|null
      */
-    public function switchLocale($locale = '')
+    public function switchLocale($locale = null)
     {
-        if ($this->requestHasLocale())
-        {
-            $locale = $this->getLocaleFromRequest();
-        }
-        elseif ($this->cookieHasLocale())
-        {
-            $locale = $this->getLocaleFromCookie();
-        }
+        $locale = $this->getLocaleFromRequest
+            ?: $this->getLocaleFromCookie();
 
         if ($locale != null)
         {
