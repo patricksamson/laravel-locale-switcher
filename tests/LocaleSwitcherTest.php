@@ -45,9 +45,8 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_stores_locale_in_session()
     {
-        $this->session->shouldReceive('get')->zeroOrMoreTimes()->andReturn('fr');
-        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(false);
-        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(false);
+        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
+        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn(null);
 
         $newLocale = $this->localeSwitcher->switchLocale('fr');
 
@@ -59,9 +58,8 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_switches_locale_from_request()
     {
-        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
-        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(false);
+        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn(null);
 
         $newLocale = $this->localeSwitcher->switchLocale();
 
@@ -73,8 +71,7 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_switches_locale_from_cookie()
     {
-        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(false);
-        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(true);
+        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
         $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('fr');
 
         $newLocale = $this->localeSwitcher->switchLocale();
@@ -87,9 +84,7 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_uses_request_over_cookie()
     {
-        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
-        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(true);
         $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('en');
 
         $newLocale = $this->localeSwitcher->switchLocale();
