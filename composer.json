@@ -1,0 +1,41 @@
+{
+	"name": "lykegenes/laravel-locale-switcher",
+	"description": "A Laravel locale switcher Middleware",
+	"keywords": [
+		"laravel",
+		"locale",
+		"switcher",
+		"middleware"
+	],
+	"homepage": "https://github.com/Lykegenes/laravel-locale-switcher",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Patrick Samson",
+			"email": "patricksamson236@gmail.com"
+		}
+	],
+	"require": {
+		"illuminate/support": "~5.1",
+		"php" : ">=5.4.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit" : "4.*",
+		"scrutinizer/ocular": "~1.1"
+	},
+	"autoload": {
+		"psr-0": {
+			"Lykegenes\\LaravelLocaleSwitcher\\": "src"
+		}
+	},
+	"scripts": {
+		"test": "phpunit"
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0-dev"
+		}
+	},
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
