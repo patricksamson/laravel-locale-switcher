@@ -149,7 +149,7 @@ class LocaleSwitcher
      */
     public function switchLocale($locale = null)
     {
-        $locale = $this->getLocaleFromRequest
+        $locale = $this->getLocaleFromRequest()
             ?: $this->getLocaleFromCookie();
 
         if ($locale != null)
