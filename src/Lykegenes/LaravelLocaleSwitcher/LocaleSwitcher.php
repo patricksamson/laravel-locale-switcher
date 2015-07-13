@@ -20,6 +20,13 @@ class LocaleSwitcher
     protected $request;
 
     /**
+     * The request instance.
+     *
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    protected $localeWasSwitched = false;
+
+    /**
      * The name of the "created at" column.
      *
      * @var string
@@ -99,6 +106,16 @@ class LocaleSwitcher
      *
      * @return bool
      */
+    public function getLocaleFromSession()
+    {
+        return $this->session->get(static::SESSION_KEY);
+    }
+
+    /**
+     * Determine if the current user is authenticated.
+     *
+     * @return bool
+     */
     public function getLocaleFromRequest()
     {
         return $this->request->input(static::REQUEST_KEY);
@@ -115,6 +132,16 @@ class LocaleSwitcher
     }
 
     /**
+     * Determine if the current user is authenticated.
+     *
+     * @return bool
+     */
+    public function localeWasSwitched()
+    {
+        return $this->localeWasSwitched;
+    }
+
+    /**
      * Attempt to authenticate using HTTP Basic Auth.
      *
      * @param  string  $field
@@ -126,7 +153,7 @@ class LocaleSwitcher
         {
             $locale = $this->getLocaleFromRequest();
         }
-        else if ($this->cookieHasLocale())
+        elseif ($this->cookieHasLocale())
         {
             $locale = $this->getLocaleFromCookie();
         }
@@ -134,9 +161,10 @@ class LocaleSwitcher
         if ($locale != null)
         {
             $this->setSessionLocale($locale);
+            $this->localeWasSwitched = true;
         }
 
-        return back()->withInput();
+        return $locale;
     }
 
     /**

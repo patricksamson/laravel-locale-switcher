@@ -34,7 +34,7 @@ class SwitchLocale
     {
         $this->localeSwitcher->setAppLocale();
 
-        return $next($request);
+        return $this->localeSwitcher->localeWasSwitched() ? back()->withInput() : $next($request);
     }
 
 }
