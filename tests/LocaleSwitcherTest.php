@@ -29,8 +29,6 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->request = Mockery::mock('Illuminate\Http\Request');
         $this->container = Mockery::mock('Illuminate\Contracts\Container\Container');
         $this->session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
-        $this->session->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
-        $this->session->shouldReceive('put')->zeroOrMoreTimes()->andReturn(true);
         $this->request->shouldReceive('getSession')->zeroOrMoreTimes()->andReturn($this->session);
         $this->localeSwitcher = new LocaleSwitcher($this->session, $this->request);
     }
@@ -88,7 +86,7 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_uses_request_over_cookie()
     {
-        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(false);
+        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
         $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(true);
         $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('en');
