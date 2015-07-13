@@ -149,13 +149,13 @@ class LocaleSwitcher
      */
     public function switchLocale($locale = '')
     {
-        if ($this->requestHasLocale())
-        {
-            $locale = $this->getLocaleFromRequest();
-        }
-        elseif ($this->cookieHasLocale())
+        if ($this->cookieHasLocale())
         {
             $locale = $this->getLocaleFromCookie();
+        }
+        elseif ($this->requestHasLocale())
+        {
+            $locale = $this->getLocaleFromRequest();
         }
 
         if ($locale != null)
