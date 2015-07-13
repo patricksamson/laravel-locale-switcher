@@ -29,8 +29,7 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->request = Mockery::mock('Illuminate\Http\Request');
         $this->container = Mockery::mock('Illuminate\Contracts\Container\Container');
         $this->session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
-        $this->session->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
-        $this->session->shouldReceive('put')->zeroOrMoreTimes()->andReturn(true);
+        $this->session->shouldReceive('put')->zeroOrMoreTimes();
         $this->request->shouldReceive('getSession')->zeroOrMoreTimes()->andReturn($this->session);
         $this->localeSwitcher = new LocaleSwitcher($this->session, $this->request);
     }
@@ -42,13 +41,24 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->container = null;
         $this->session = null;
     }
+    
+    /** @test */
+    public function it_uses_application_default_by_default()
+    {
+        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
+        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn(null);
+
+        $newLocale = $this->localeSwitcher->switchLocale();
+
+        $this->assertFalse($this->localeSwitcher->localeWasSwitched());
+        $this->assertNull($newLocale);
+    }
 
     /** @test */
     public function it_stores_locale_in_session()
     {
-        $this->session->shouldReceive('get')->zeroOrMoreTimes()->andReturn('fr');
-        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(false);
-        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(false);
+        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
+        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn(null);
 
         $newLocale = $this->localeSwitcher->switchLocale('fr');
 
@@ -60,9 +70,8 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_switches_locale_from_request()
     {
-        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
-        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(false);
+        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn(null);
 
         $newLocale = $this->localeSwitcher->switchLocale();
 
@@ -72,16 +81,29 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_switches_locale_from_cokkie()
+    public function it_switches_locale_from_cookie()
     {
-        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(false);
-        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(true);
+        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
         $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('fr');
 
         $newLocale = $this->localeSwitcher->switchLocale();
 
         $this->assertTrue($this->localeSwitcher->localeWasSwitched());
         $this->assertNotEquals('', $newLocale);
+        $this->assertEquals('fr', $newLocale);
+    }
+    
+    /** @test */
+    public function it_uses_request_over_cookie()
+    {
+        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
+        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('en');
+
+        $newLocale = $this->localeSwitcher->switchLocale();
+
+        $this->assertTrue($this->localeSwitcher->localeWasSwitched());
+        $this->assertNotEquals('', $newLocale);
+        $this->assertNotEquals('en', $newLocale);
         $this->assertEquals('fr', $newLocale);
     }
 }
