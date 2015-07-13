@@ -106,9 +106,9 @@ class LocaleSwitcher
      *
      * @return bool
      */
-    public function getLocaleFromSession()
+    public function getLocaleFromSession($default = null)
     {
-        return $this->session->get(static::SESSION_KEY);
+        return $this->session->get(static::SESSION_KEY, $default);
     }
 
     /**
@@ -116,9 +116,9 @@ class LocaleSwitcher
      *
      * @return bool
      */
-    public function getLocaleFromRequest()
+    public function getLocaleFromRequest($default = null)
     {
-        return $this->request->input(static::REQUEST_KEY);
+        return $this->request->input(static::REQUEST_KEY, $default);
     }
 
     /**
@@ -126,9 +126,9 @@ class LocaleSwitcher
      *
      * @return bool
      */
-    public function getLocaleFromCookie()
+    public function getLocaleFromCookie($default = null)
     {
-        return $this->request->cookie(static::COOKIE_KEY);
+        return $this->request->cookie(static::COOKIE_KEY, $default);
     }
 
     /**
@@ -149,13 +149,13 @@ class LocaleSwitcher
      */
     public function switchLocale($locale = '')
     {
-        if ($this->cookieHasLocale())
-        {
-            $locale = $this->getLocaleFromCookie();
-        }
-        elseif ($this->requestHasLocale())
+        if ($this->requestHasLocale())
         {
             $locale = $this->getLocaleFromRequest();
+        }
+        elseif ($this->cookieHasLocale())
+        {
+            $locale = $this->getLocaleFromCookie();
         }
 
         if ($locale != null)
