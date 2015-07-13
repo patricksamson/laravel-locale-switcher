@@ -41,6 +41,18 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->container = null;
         $this->session = null;
     }
+    
+    /** @test */
+    public function it_uses_application_default_by_default()
+    {
+        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
+        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn(null);
+
+        $newLocale = $this->localeSwitcher->switchLocale();
+
+        $this->assertFalse($this->localeSwitcher->localeWasSwitched());
+        $this->assertNull($newLocale);
+    }
 
     /** @test */
     public function it_stores_locale_in_session()
