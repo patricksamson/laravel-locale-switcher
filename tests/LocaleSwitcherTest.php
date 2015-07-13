@@ -70,4 +70,18 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals('', $newLocale);
         $this->assertEquals('fr', $newLocale);
     }
+
+    /** @test */
+    public function it_switches_locale_from_cokkie()
+    {
+        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(false);
+        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(true);
+        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('fr');
+
+        $newLocale = $this->localeSwitcher->switchLocale();
+
+        $this->assertTrue($this->localeSwitcher->localeWasSwitched());
+        $this->assertNotEquals('', $newLocale);
+        $this->assertEquals('fr', $newLocale);
+    }
 }
