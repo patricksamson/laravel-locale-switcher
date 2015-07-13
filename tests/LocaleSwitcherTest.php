@@ -29,6 +29,7 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->request = Mockery::mock('Illuminate\Http\Request');
         $this->container = Mockery::mock('Illuminate\Contracts\Container\Container');
         $this->session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $this->session->shouldReceive('put')->zeroOrMoreTimes();
         $this->request->shouldReceive('getSession')->zeroOrMoreTimes()->andReturn($this->session);
         $this->localeSwitcher = new LocaleSwitcher($this->session, $this->request);
     }
