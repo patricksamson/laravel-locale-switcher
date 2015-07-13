@@ -72,7 +72,7 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_switches_locale_from_cokkie()
+    public function it_switches_locale_from_cookie()
     {
         $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(false);
         $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(true);
@@ -82,6 +82,22 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->localeSwitcher->localeWasSwitched());
         $this->assertNotEquals('', $newLocale);
+        $this->assertEquals('fr', $newLocale);
+    }
+    
+    /** @test */
+    public function it_uses_request_over_cookie()
+    {
+        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(false);
+        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
+        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(true);
+        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('en');
+
+        $newLocale = $this->localeSwitcher->switchLocale();
+
+        $this->assertTrue($this->localeSwitcher->localeWasSwitched());
+        $this->assertNotEquals('', $newLocale);
+        $this->assertNotEquals('en', $newLocale);
         $this->assertEquals('fr', $newLocale);
     }
 }
