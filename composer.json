@@ -25,8 +25,8 @@
         "mockery/mockery": "0.9.*"
 	},
 	"autoload": {
-		"psr-0": {
-			"Lykegenes\\LaravelLocaleSwitcher\\": "src"
+		"psr-4": {
+			"Lykegenes\\LaravelLocaleSwitcher\\": "src/"
 		}
 	},
 	"scripts": {
