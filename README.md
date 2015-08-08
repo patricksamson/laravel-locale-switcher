@@ -12,12 +12,17 @@ A Simple Laravel middleware to easily load and switch the user's locale.
 Via Composer
 
 ``` bash
-$ composer require lykegenes/laravel-locale-switcher
+composer require lykegenes/laravel-locale-switcher
 ```
 
-Then, add this to your $middleware array in App/Http/Kernel.php
+Then, add this to your Service Providers :
 ``` php
-\Lykegenes\LaravelLocaleSwitcher\Middleware\SwitchLocale::class,
+Lykegenes\LaravelLocaleSwitcher\ServiceProvider::class,
+```
+
+Optionally, you can publish and edit the configuration file :
+``` bash
+php artisan vendor:publish --provider="Lykegenes\LaravelLocaleSwitcher\ServiceProvider" --tag=config
 ```
 
 ## Usage

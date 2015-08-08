@@ -4,6 +4,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
 
     /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = false;
+
+    /**
      * Register the service provider.
      *
      * @return void
@@ -19,7 +26,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $configPath = __DIR__ . '/../config/config.php';
         $this->publishes([$configPath => $this->getConfigPath()], 'config');
 
-        $enabled = $this->app['config']->get('debugbar.enabled');
+        $enabled = $this->app['config']->get('locale-switcher.enabled');
         if (!$enabled)
         {
             return;
