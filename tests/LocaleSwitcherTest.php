@@ -26,9 +26,9 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->request = Mockery::mock('Illuminate\Http\Request');
+        $this->request   = Mockery::mock('Illuminate\Http\Request');
         $this->container = Mockery::mock('Illuminate\Contracts\Container\Container');
-        $this->session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $this->session   = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
         $this->session->shouldReceive('put')->zeroOrMoreTimes();
         $this->request->shouldReceive('getSession')->zeroOrMoreTimes()->andReturn($this->session);
         $this->localeSwitcher = new LocaleSwitcher($this->session, $this->request);
@@ -37,11 +37,11 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         Mockery::close();
-        $this->request = null;
+        $this->request   = null;
         $this->container = null;
-        $this->session = null;
+        $this->session   = null;
     }
-    
+
     /** @test */
     public function it_uses_application_default_by_default()
     {
@@ -92,7 +92,7 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals('', $newLocale);
         $this->assertEquals('fr', $newLocale);
     }
-    
+
     /** @test */
     public function it_uses_request_over_cookie()
     {
