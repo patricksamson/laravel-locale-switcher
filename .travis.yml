@@ -12,8 +12,15 @@ matrix:
 
 install:
   - composer install --prefer-source
+  
+addons:
+  code_climate:
+    repo_token: e9d8026b4a1ca0f1c3577c3772bbe9d8d337f0cb2ee50642d2047efa8a148327
 
 script: phpunit
+
+after_script:
+  - vendor/bin/test-reporter
 
 notifications:
   email:
