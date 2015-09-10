@@ -3,7 +3,8 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
-[![Dependencies][ico-versioneye]][link-versioneye]
+[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
+[![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 A Simple Laravel middleware to easily load and switch the user's locale.
@@ -48,26 +49,29 @@ $url = url('/some/url').'?locale=en';
 ## Testing
 
 ``` bash
-$ composer test
+composer test
 ```
 
 ## Credits
 
 - [Patrick Samson][link-author]
+- [All Contributors][link-contributors]
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/Lykegenes/laravel-locale-switcher.svg?style=flat-square
-[ico-license]: https://img.shields.io/packagist/l/Lykegenes/laravel-locale-switcher.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/lykegenes/laravel-locale-switcher.svg?style=flat-square
+[ico-license]: https://img.shields.io/packagist/l/lykegenes/laravel-locale-switcher.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/Lykegenes/laravel-locale-switcher/master.svg?style=flat-square
-[ico-versioneye]: https://img.shields.io/versioneye/d/php/lykegenes:laravel-locale-switcher.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/lykegenes/laravel-locale-switcher.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/lykegenes/laravel-locale-switcher.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/lykegenes/laravel-locale-switcher.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/lykegenes/laravel-locale-switcher
 [link-travis]: https://travis-ci.org/Lykegenes/laravel-locale-switcher
-[link-versioneye]: https://www.versioneye.com/php/lykegenes:laravel-locale-switcher
+[link-scrutinizer]: https://scrutinizer-ci.com/g/lykegenes/laravel-locale-switcher/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/lykegenes/laravel-locale-switcher
 [link-downloads]: https://packagist.org/packages/lykegenes/laravel-locale-switcher
-[link-author]: https://github.com/Lykegenes
+[link-author]: https://github.com/lykegenes
 [link-contributors]: ../../contributors
