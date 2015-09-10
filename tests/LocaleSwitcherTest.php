@@ -59,10 +59,14 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     {
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
         $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn(null);
+        $this->session->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
+        $this->session->shouldReceive('get')->zeroOrMoreTimes()->andReturn('fr');
 
         $newLocale = $this->localeSwitcher->switchLocale('fr');
 
         $this->assertTrue($this->localeSwitcher->localeWasSwitched());
+        $this->assertTrue($this->localeSwitcher->sessionHasLocale());
+        $this->assertEquals('fr', $this->localeSwitcher->getLocaleFromSession());
         $this->assertNotEquals('', $newLocale);
         $this->assertEquals('fr', $newLocale);
     }
@@ -72,10 +76,12 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     {
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
         $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn(null);
+        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
 
         $newLocale = $this->localeSwitcher->switchLocale();
 
         $this->assertTrue($this->localeSwitcher->localeWasSwitched());
+        $this->assertTrue($this->localeSwitcher->requestHasLocale());
         $this->assertNotEquals('', $newLocale);
         $this->assertEquals('fr', $newLocale);
     }
@@ -85,10 +91,12 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     {
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
         $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('fr');
+        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(true);
 
         $newLocale = $this->localeSwitcher->switchLocale();
 
         $this->assertTrue($this->localeSwitcher->localeWasSwitched());
+        $this->assertTrue($this->localeSwitcher->cookieHasLocale());
         $this->assertNotEquals('', $newLocale);
         $this->assertEquals('fr', $newLocale);
     }
@@ -106,4 +114,5 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals('en', $newLocale);
         $this->assertEquals('fr', $newLocale);
     }
+
 }
