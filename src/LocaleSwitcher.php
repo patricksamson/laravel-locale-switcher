@@ -1,5 +1,6 @@
 <?php namespace Lykegenes\LaravelLocaleSwitcher;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -172,7 +173,9 @@ class LocaleSwitcher
         $this->switchLocale();
 
         if ($this->sessionHasLocale()) {
-            app()->setLocale($this->session->get(static::SESSION_KEY));
+            $locale = $this->session->get(static::SESSION_KEY);
+            App::setLocale($locale);
+            return $locale;
         }
     }
 }

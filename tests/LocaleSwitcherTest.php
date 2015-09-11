@@ -115,4 +115,20 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('fr', $newLocale);
     }
 
+    /** @test */
+    public function it_sets_app_locale()
+    {
+        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
+        $this->session->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
+        $this->session->shouldReceive('get')->zeroOrMoreTimes()->andReturn('fr');
+        Illuminate\Support\Facades\App::shouldReceive('setLocale')->once();
+
+        $newLocale = $this->localeSwitcher->setAppLocale();
+
+        $this->assertTrue($this->localeSwitcher->localeWasSwitched());
+        $this->assertNotEquals('', $newLocale);
+        $this->assertNotEquals('en', $newLocale);
+        $this->assertEquals('fr', $newLocale);
+    }
+
 }
