@@ -1,4 +1,5 @@
-<?php namespace Lykegenes\LaravelLocaleSwitcher;
+<?php
+namespace Lykegenes\LocaleSwitcher;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;

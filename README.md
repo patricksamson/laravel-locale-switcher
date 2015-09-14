@@ -19,12 +19,12 @@ composer require lykegenes/laravel-locale-switcher
 
 Then, add this to your Service Providers :
 ``` php
-Lykegenes\LaravelLocaleSwitcher\ServiceProvider::class,
+Lykegenes\LocaleSwitcher\ServiceProvider::class,
 ```
 
 Optionally, you can publish and edit the configuration file :
 ``` bash
-php artisan vendor:publish --provider="Lykegenes\LaravelLocaleSwitcher\ServiceProvider" --tag=config
+php artisan vendor:publish --provider="Lykegenes\LocaleSwitcher\ServiceProvider" --tag=config
 ```
 
 ## Usage

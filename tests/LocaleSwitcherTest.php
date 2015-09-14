@@ -1,6 +1,6 @@
 <?php
 
-use Lykegenes\LaravelLocaleSwitcher\LocaleSwitcher;
+use Lykegenes\LocaleSwitcher\LocaleSwitcher;
 
 class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
 {
