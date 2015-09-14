@@ -1,5 +1,7 @@
-<?php namespace Lykegenes\LaravelLocaleSwitcher;
+<?php
+namespace Lykegenes\LocaleSwitcher;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -55,8 +57,7 @@ class LocaleSwitcher
      * @return void
      */
     public function __construct(SessionInterface $session,
-        Request $request = null)
-    {
+        Request $request = null) {
         $this->session = $session;
         $this->request = $request;
     }
@@ -142,20 +143,19 @@ class LocaleSwitcher
     }
 
     /**
-     * Attempt to authenticate using HTTP Basic Auth.
+     * Switch locale in the current user's session
      *
-     * @param  string  $field
-     * @return \Symfony\Component\HttpFoundation\Response|null
+     * @param  string  $default The default locale to use
+     * @return string|null The locale that should now be used
      */
-    public function switchLocale($locale = null)
+    public function switchLocale($default = null)
     {
         // returns the first non-null value
         $locale = $this->getLocaleFromRequest()
             ?: $this->getLocaleFromCookie()
-            ?: $locale;
+            ?: $default;
 
-        if ($locale != null)
-        {
+        if ($locale != null) {
             $this->setSessionLocale($locale);
             $this->localeWasSwitched = true;
         }
@@ -173,9 +173,10 @@ class LocaleSwitcher
     {
         $this->switchLocale();
 
-        if ($this->sessionHasLocale())
-        {
-            app()->setLocale($this->session->get(static::SESSION_KEY));
+        if ($this->sessionHasLocale()) {
+            $locale = $this->session->get(static::SESSION_KEY);
+            App::setLocale($locale);
+            return $locale;
         }
     }
 }

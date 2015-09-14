@@ -1,7 +1,8 @@
-<?php namespace Lykegenes\LaravelLocaleSwitcher\Middleware;
+<?php
+namespace Lykegenes\LocaleSwitcher\Middleware;
 
 use Closure;
-use Lykegenes\LaravelLocaleSwitcher\LocaleSwitcher;
+use Lykegenes\LocaleSwitcher\LocaleSwitcher;
 
 class SwitchLocale
 {

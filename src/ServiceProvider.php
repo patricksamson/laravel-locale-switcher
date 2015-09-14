@@ -1,4 +1,5 @@
-<?php namespace Lykegenes\LaravelLocaleSwitcher;
+<?php
+namespace Lykegenes\LocaleSwitcher;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -27,12 +28,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishes([$configPath => $this->getConfigPath()], 'config');
 
         $enabled = $this->app['config']->get('locale-switcher.enabled');
-        if (!$enabled)
-        {
+        if (!$enabled) {
             return;
         }
 
-        $this->registerMiddleware('Lykegenes\LaravelLocaleSwitcher\Middleware\SwitchLocale');
+        $this->registerMiddleware('Lykegenes\LocaleSwitcher\Middleware\SwitchLocale');
     }
 
     /**
