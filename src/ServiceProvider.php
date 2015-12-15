@@ -1,9 +1,9 @@
 <?php
+
 namespace Lykegenes\LocaleSwitcher;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -18,17 +18,17 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        $configPath = __DIR__ . '/../config/config.php';
+        $configPath = __DIR__.'/../config/config.php';
         $this->mergeConfigFrom($configPath, 'locale-switcher');
     }
 
     public function boot()
     {
-        $configPath = __DIR__ . '/../config/config.php';
+        $configPath = __DIR__.'/../config/config.php';
         $this->publishes([$configPath => $this->getConfigPath()], 'config');
 
         $enabled = $this->app['config']->get('locale-switcher.enabled');
-        if (!$enabled) {
+        if (! $enabled) {
             return;
         }
 
@@ -44,7 +44,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     }
 
     /**
-     * Get the config path
+     * Get the config path.
      *
      * @return string
      */
@@ -54,7 +54,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     }
 
     /**
-     * Publish the config file
+     * Publish the config file.
      *
      * @param  string $configPath
      */
@@ -64,7 +64,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     }
 
     /**
-     * Register the Debugbar Middleware
+     * Register the Debugbar Middleware.
      *
      * @param  string $middleware
      */
@@ -73,5 +73,4 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $kernel = $this->app['Illuminate\Contracts\Http\Kernel'];
         $kernel->pushMiddleware($middleware);
     }
-
 }
