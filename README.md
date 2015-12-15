@@ -41,9 +41,9 @@ This will store the locale in the user's session, and set it as the current loca
 
 You can build the routes like so :
 ``` php
-$url = action('SomeController@someFunction').'?locale=en';
-$url = route('someNamedRoute').'?locale=en';
-$url = url('/some/url').'?locale=en';
+$url = action('SomeController@someFunction', ['locale' => 'en']);
+$url = route('someNamedRoute', ['locale' => 'en']);
+$url = url('/some/url', ['locale' => 'en']);
 ```
 
 ## Testing
