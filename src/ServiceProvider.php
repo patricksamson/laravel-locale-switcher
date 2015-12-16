@@ -1,9 +1,9 @@
 <?php
+
 namespace Lykegenes\LocaleSwitcher;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -28,7 +28,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishes([$configPath => $this->getConfigPath()], 'config');
 
         $enabled = $this->app['config']->get('locale-switcher.enabled');
-        if (!$enabled) {
+        if ( ! $enabled) {
             return;
         }
 
@@ -56,7 +56,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     /**
      * Publish the config file
      *
-     * @param  string $configPath
+     * @param string $configPath
      */
     protected function publishConfig($configPath)
     {
@@ -66,7 +66,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     /**
      * Register the Debugbar Middleware
      *
-     * @param  string $middleware
+     * @param string $middleware
      */
     protected function registerMiddleware($middleware)
     {
