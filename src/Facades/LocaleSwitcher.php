@@ -1,4 +1,5 @@
 <?php
+
 namespace Lykegenes\LocaleSwitcher\Facades;
 
 use Illuminate\Support\Facades\Facade;

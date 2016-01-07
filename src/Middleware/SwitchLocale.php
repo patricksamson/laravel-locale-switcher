@@ -1,4 +1,5 @@
 <?php
+
 namespace Lykegenes\LocaleSwitcher\Middleware;
 
 use Closure;
@@ -37,5 +38,4 @@ class SwitchLocale
 
         return $this->localeSwitcher->localeWasSwitched() ? back()->withInput() : $next($request);
     }
-
 }
