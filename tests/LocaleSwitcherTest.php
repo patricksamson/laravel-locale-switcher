@@ -1,5 +1,6 @@
 <?php
 
+use Lykegenes\LocaleSwitcher\CurrentConfig;
 use Lykegenes\LocaleSwitcher\LocaleSwitcher;
 
 class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
@@ -24,14 +25,23 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
      */
     protected $localeSwitcher;
 
+    /**
+     * @var LocaleSwitcher
+     */
+    protected $currentConfig;
+
     public function setUp()
     {
         $this->request = Mockery::mock('Illuminate\Http\Request');
         $this->container = Mockery::mock('Illuminate\Contracts\Container\Container');
         $this->session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $this->currentConfig = Mockery::mock('Lykegenes\LocaleSwitcher\CurrentConfig');
+
         $this->session->shouldReceive('put')->zeroOrMoreTimes();
         $this->request->shouldReceive('getSession')->zeroOrMoreTimes()->andReturn($this->session);
-        $this->localeSwitcher = new LocaleSwitcher($this->session, $this->request);
+        $this->currentConfig->shouldReceive('isEnabledLocale')->zeroOrMoreTimes()->andReturn(true);
+
+        $this->localeSwitcher = new LocaleSwitcher($this->session, $this->request, $this->currentConfig);
     }
 
     public function tearDown()
@@ -131,4 +141,17 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('fr', $newLocale);
     }
 
+    /** @test */
+    public function it_returns_enabled_locales()
+    {
+        $expected = [
+            'en' => 'English',
+            'fr' => 'Français',
+        ];
+        $this->currentConfig->shouldReceive('getEnabledLocales')->zeroOrMoreTimes()->andReturn($expected);
+
+        $locales = $this->localeSwitcher->getEnabledLocales();
+
+        $this->assertEquals($expected, $locales);
+    }
 }

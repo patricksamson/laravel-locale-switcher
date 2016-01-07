@@ -22,6 +22,11 @@ Then, add this to your Service Providers :
 Lykegenes\LocaleSwitcher\ServiceProvider::class,
 ```
 
+and add this Alias
+``` php
+'LocaleSwitcher' => Lykegenes\LocaleSwitcher\Facades\LocaleSwitcher::class,
+```
+
 Optionally, you can publish and edit the configuration file :
 ``` bash
 php artisan vendor:publish --provider="Lykegenes\LocaleSwitcher\ServiceProvider" --tag=config
@@ -40,10 +45,15 @@ http://my-app.com/some/sub/route?locale=es&otherParam=value
 This will store the locale in the user's session, and set it as the current locale everytime the user requests a page.
 
 You can build the routes like so :
-``` php
+```php
 $url = action('SomeController@someFunction', ['locale' => 'en']);
 $url = route('someNamedRoute', ['locale' => 'en']);
 $url = url('/some/url', ['locale' => 'en']);
+```
+
+You can easily generate a dropdown using the `laravelcollective/html` :
+```php
+HTML::ul(LocaleSwitcher::getEnabledLocales());
 ```
 
 ## Testing

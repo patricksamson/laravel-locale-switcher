@@ -9,6 +9,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class LocaleSwitcher
 {
     /**
+     * The current LocaleSwitcher config
+     *
+     * @var \Lykegenes\LocaleSwitcher\CurrentConfig
+     */
+    protected $currentConfig;
+
+    /**
      * The session used by the guard.
      *
      * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
@@ -57,10 +64,21 @@ class LocaleSwitcher
      * @param  \Symfony\Component\HttpFoundation\Request                  $request
      * @return void
      */
-    public function __construct(SessionInterface $session, Request $request = null)
+    public function __construct(SessionInterface $session, Request $request = null, CurrentConfig $currentConfig = null)
     {
         $this->session = $session;
         $this->request = $request;
+        $this->currentConfig = $currentConfig;
+    }
+
+    /**
+     * Get an array of ll the enabled locales.
+     *
+     * @return array
+     */
+    public function getEnabledLocales()
+    {
+        return $this->currentConfig->getEnabledLocales();
     }
 
     /**
@@ -156,7 +174,7 @@ class LocaleSwitcher
             ?: $this->getLocaleFromCookie()
             ?: $default;
 
-        if ($locale != null) {
+        if ($locale !== null && $this->currentConfig->isEnabledLocale($locale)) {
             $this->setSessionLocale($locale);
             $this->localeWasSwitched = true;
         }
@@ -180,4 +198,4 @@ class LocaleSwitcher
             return $locale;
         }
     }
-}
+};

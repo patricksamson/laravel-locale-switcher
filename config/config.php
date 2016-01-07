@@ -25,43 +25,15 @@ return array(
 
     /**
      *--------------------------------------------------------------------------
-     * Primary and Regional Locales
-     *--------------------------------------------------------------------------
-     *
-     * You can enable or disable regional locales support. (default : false)
-     *
-     * If regional locales are enabled, 'en', 'en-US' and 'en-GB' will be considered
-     * like different locales by your Laravel application. They will also need to
-     * be individually enabled in this package (see the "enabled_locales" setting).
-     *
-     * If regional locales are disabled, 'en-US' and 'en-GB' will automatically be
-     * converted to simply 'en'. You'll only have to enable the 'en' locale in this
-     * package, and only need the 'en' language in your Laravel translations.
-     *
-     */
-    'enable_regional_locales' => false,
-
-    /**
-     *--------------------------------------------------------------------------
      * Enabled Locales
      *--------------------------------------------------------------------------
      *
      * Specify the locales you want to enable in your app.
-     * Look here for all the supported locales :
-     * https://github.com/Lykegenes/laravel-locale-switcher/blob/master/src/Resources/LocalesList.php
-     *
-     * Only the locales enabled here will be allowed in you application.
-     *
-     * Set to Null to disable this feature. ( 'enabled_locales' => null, )
      *
      */
     'enabled_locales' => [
-        'en', // If Regional Locales are disabled, you only need 'en'
-        //'en-US',  // else, you also need to enable the regions you want.
-        //'en-GB',
-        //'en-CA',
-        'fr',
-        //'fr-CA'
+        'en' => 'English',
+        'fr' => 'Français',
     ],
 
 );
