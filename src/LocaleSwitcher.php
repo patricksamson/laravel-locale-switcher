@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class LocaleSwitcher
 {
     /**
-     * The current LocaleSwitcher config
+     * The current LocaleSwitcher config.
      *
      * @var \Lykegenes\LocaleSwitcher\CurrentConfig
      */
@@ -162,7 +162,7 @@ class LocaleSwitcher
     }
 
     /**
-     * Switch locale in the current user's session
+     * Switch locale in the current user's session.
      *
      * @param  string      $default The default locale to use
      * @return string|null The locale that should now be used
@@ -195,6 +195,7 @@ class LocaleSwitcher
         if ($this->sessionHasLocale()) {
             $locale = $this->session->get(static::SESSION_KEY);
             App::setLocale($locale);
+
             return $locale;
         }
     }

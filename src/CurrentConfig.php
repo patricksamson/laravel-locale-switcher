@@ -2,14 +2,12 @@
 
 namespace Lykegenes\LocaleSwitcher;
 
-use Lykegenes\LocaleSwitcher\Locales;
-
 class CurrentConfig
 {
     /**
      * Check if this package is enabled or not.
      *
-     * @return boolean
+     * @return bool
      */
     public static function isPackageEnabled()
     {
@@ -32,7 +30,7 @@ class CurrentConfig
      *
      * @param  string  $locale The locale shorthand to verify
      *
-     * @return boolean
+     * @return bool
      */
     public static function isEnabledLocale($locale)
     {
@@ -48,7 +46,7 @@ class CurrentConfig
      */
     public static function getLocaleName($locale)
     {
-        return config('locale-switcher.enabled_locales.' . $locale, null);
+        return config('locale-switcher.enabled_locales.'.$locale, null);
     }
 
     /**
