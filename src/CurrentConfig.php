@@ -34,6 +34,10 @@ class CurrentConfig
      */
     public static function isEnabledLocale($locale)
     {
+        if (config('locale-switcher.enabled_locales') !== null) {
+            return true;
+        }
+        
         return array_key_exists($locale, config('locale-switcher.enabled_locales'));
     }
 
