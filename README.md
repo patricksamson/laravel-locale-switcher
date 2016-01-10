@@ -50,7 +50,7 @@ $url = route('someNamedRoute', ['locale' => 'en']);
 $url = url('/some/url', ['locale' => 'en']);
 ```
 
-You can easily generate a dropdown using the `laravelcollective/html` :
+You can easily generate a dropdown using the [laravelcollective/html](https://github.com/LaravelCollective/html) package :
 ```php
 HTML::ul(LocaleSwitcher::getEnabledLocales());
 ```
