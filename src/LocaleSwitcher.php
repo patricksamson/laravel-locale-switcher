@@ -1,12 +1,20 @@
 <?php
+
 namespace Lykegenes\LocaleSwitcher;
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class LocaleSwitcher
 {
+    /**
+     * The current LocaleSwitcher config.
+     *
+     * @var \Lykegenes\LocaleSwitcher\CurrentConfig
+     */
+    protected $currentConfig;
+
     /**
      * The session used by the guard.
      *
@@ -52,14 +60,25 @@ class LocaleSwitcher
     /**
      * Create a new locale switcher.
      *
-     * @param  \Symfony\Component\HttpFoundation\Session\SessionInterface  $session
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+     * @param  \Symfony\Component\HttpFoundation\Request                  $request
      * @return void
      */
-    public function __construct(SessionInterface $session,
-        Request $request = null) {
+    public function __construct(SessionInterface $session, Request $request = null, CurrentConfig $currentConfig = null)
+    {
         $this->session = $session;
         $this->request = $request;
+        $this->currentConfig = $currentConfig;
+    }
+
+    /**
+     * Get an array of ll the enabled locales.
+     *
+     * @return array
+     */
+    public function getEnabledLocales()
+    {
+        return $this->currentConfig->getEnabledLocales();
     }
 
     /**
@@ -143,9 +162,9 @@ class LocaleSwitcher
     }
 
     /**
-     * Switch locale in the current user's session
+     * Switch locale in the current user's session.
      *
-     * @param  string  $default The default locale to use
+     * @param  string      $default The default locale to use
      * @return string|null The locale that should now be used
      */
     public function switchLocale($default = null)
@@ -155,7 +174,7 @@ class LocaleSwitcher
             ?: $this->getLocaleFromCookie()
             ?: $default;
 
-        if ($locale != null) {
+        if ($locale !== null && $this->currentConfig->isEnabledLocale($locale)) {
             $this->setSessionLocale($locale);
             $this->localeWasSwitched = true;
         }
@@ -166,7 +185,7 @@ class LocaleSwitcher
     /**
      * Attempt to authenticate using HTTP Basic Auth.
      *
-     * @param  string  $field
+     * @param  string                                            $field
      * @return \Symfony\Component\HttpFoundation\Response|null
      */
     public function setAppLocale()
@@ -176,7 +195,8 @@ class LocaleSwitcher
         if ($this->sessionHasLocale()) {
             $locale = $this->session->get(static::SESSION_KEY);
             App::setLocale($locale);
+
             return $locale;
         }
     }
-}
+};
