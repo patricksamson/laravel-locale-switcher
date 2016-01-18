@@ -1,10 +1,14 @@
 <?php
 
-use Lykegenes\LocaleSwitcher\CurrentConfig;
 use Lykegenes\LocaleSwitcher\LocaleSwitcher;
 
 class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Mockery\MockInterface
+     */
+    protected $app;
+
     /**
      * @var Mockery\MockInterface
      */
@@ -26,22 +30,23 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     protected $localeSwitcher;
 
     /**
-     * @var LocaleSwitcher
+     * @var ConfigManager
      */
-    protected $currentConfig;
+    protected $config;
 
     public function setUp()
     {
+        $this->app = Mockery::mock('Illuminate\Foundation\Application');
         $this->request = Mockery::mock('Illuminate\Http\Request');
         $this->container = Mockery::mock('Illuminate\Contracts\Container\Container');
         $this->session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
-        $this->currentConfig = Mockery::mock('Lykegenes\LocaleSwitcher\CurrentConfig');
+        $this->config = Mockery::mock('Lykegenes\LocaleSwitcher\ConfigManager');
 
         $this->session->shouldReceive('put')->zeroOrMoreTimes();
         $this->request->shouldReceive('getSession')->zeroOrMoreTimes()->andReturn($this->session);
         $this->currentConfig->shouldReceive('isEnabledLocale')->zeroOrMoreTimes()->andReturn(true);
 
-        $this->localeSwitcher = new LocaleSwitcher($this->session, $this->request, $this->currentConfig);
+        $this->localeSwitcher = new LocaleSwitcher($this->app, $this->currentConfig);
     }
 
     public function tearDown()
