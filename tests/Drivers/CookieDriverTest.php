@@ -2,7 +2,7 @@
 
 use Lykegenes\LocaleSwitcher\Drivers\CookieDriver;
 
-class CookieDriverTest extends PHPUnit_Framework_TestCase
+class CookieDriverTest extends Orchestra\Testbench\TestCase
 {
     /**
      * @var Mockery\MockInterface
@@ -16,6 +16,8 @@ class CookieDriverTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->request = Mockery::mock('Illuminate\Http\Request');
 
         $this->cookieDriver = new CookieDriver($this->request);

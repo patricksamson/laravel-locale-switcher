@@ -27,6 +27,6 @@ class RequestDriver extends BaseDriver
 
     public function get($key = self::DEFAULT_KEY, $default = null)
     {
-        return $this->request->get($key, $default);
+        return $this->request->input($key, $default);
     }
 }

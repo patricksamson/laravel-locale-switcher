@@ -2,7 +2,7 @@
 
 use Lykegenes\LocaleSwitcher\Drivers\RequestDriver;
 
-class RequestDriverTest extends PHPUnit_Framework_TestCase
+class RequestDriverTest extends Orchestra\Testbench\TestCase
 {
     /**
      * @var Mockery\MockInterface
@@ -16,6 +16,8 @@ class RequestDriverTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->request = Mockery::mock('Illuminate\Http\Request');
 
         $this->requestDriver = new RequestDriver($this->request);
@@ -38,7 +40,7 @@ class RequestDriverTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_gets_locale_from_request()
     {
-        $this->request->shouldReceive('get')->zeroOrMoreTimes()->andReturn('en');
+        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('en');
 
         $locale = $this->requestDriver->get();
 

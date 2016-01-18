@@ -2,7 +2,7 @@
 
 use Lykegenes\LocaleSwitcher\Drivers\SessionDriver;
 
-class SessionDriverTest extends PHPUnit_Framework_TestCase
+class SessionDriverTest extends Orchestra\Testbench\TestCase
 {
     /**
      * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
@@ -16,6 +16,8 @@ class SessionDriverTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
 
         $this->sessionDriver = new SessionDriver($this->session);

@@ -16,7 +16,7 @@ class ConfigManager
 
     public static function getSourceDrivers()
     {
-        return config('locale-switcher.source_drivers');
+        return config('locale-switcher.source_drivers', []);
     }
 
     public static function getStoreDriver()
