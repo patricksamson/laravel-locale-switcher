@@ -15,9 +15,6 @@ addons:
   code_climate:
     repo_token: e9d8026b4a1ca0f1c3577c3772bbe9d8d337f0cb2ee50642d2047efa8a148327
 
-before_install:
-  - travis_retry composer self-update
-
 install:
   - travis_retry composer install --prefer-source --no-interaction
 
