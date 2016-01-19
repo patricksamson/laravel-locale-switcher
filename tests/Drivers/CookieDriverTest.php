@@ -32,7 +32,7 @@ class CookieDriverTest extends Orchestra\Testbench\TestCase
     /** @test */
     public function it_detects_if_cookie_has_locale()
     {
-        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(true);
+        $this->request->shouldReceive('hasCookie')->atLeast()->once()->andReturn(true);
 
         $this->assertTrue($this->cookieDriver->has('key'));
     }
@@ -40,7 +40,7 @@ class CookieDriverTest extends Orchestra\Testbench\TestCase
     /** @test */
     public function it_gets_locale_from_cookie()
     {
-        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('en');
+        $this->request->shouldReceive('cookie')->atLeast()->once()->andReturn('en');
 
         $locale = $this->cookieDriver->get('key');
 

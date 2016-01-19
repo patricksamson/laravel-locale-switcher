@@ -32,7 +32,7 @@ class RequestDriverTest extends Orchestra\Testbench\TestCase
     /** @test */
     public function it_detects_if_request_has_locale()
     {
-        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
+        $this->request->shouldReceive('has')->atLeast()->once()->andReturn(true);
 
         $this->assertTrue($this->requestDriver->has('key'));
     }
@@ -40,7 +40,7 @@ class RequestDriverTest extends Orchestra\Testbench\TestCase
     /** @test */
     public function it_gets_locale_from_request()
     {
-        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('en');
+        $this->request->shouldReceive('input')->atLeast()->once()->andReturn('en');
 
         $locale = $this->requestDriver->get('key');
 

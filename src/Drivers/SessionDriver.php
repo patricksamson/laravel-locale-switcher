@@ -6,13 +6,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SessionDriver extends BaseDriver
 {
-    /**
-     * The name of the "created at" column.
-     *
-     * @var string
-     */
-    const DEFAULT_KEY = 'locale';
-
     protected $session;
 
     public function __construct(SessionInterface $session)
@@ -20,17 +13,17 @@ class SessionDriver extends BaseDriver
         $this->session = $session;
     }
 
-    public function has($key = self::DEFAULT_KEY)
+    public function has($key)
     {
         return $this->session->has($key);
     }
 
-    public function get($key = self::DEFAULT_KEY, $default = null)
+    public function get($key, $default = null)
     {
         return $this->session->get($key, $default);
     }
 
-    public function store($key = self::DEFAULT_KEY, $value)
+    public function store($key, $value)
     {
         return $this->session->put($key, $value);
     }
