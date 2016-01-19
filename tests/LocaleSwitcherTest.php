@@ -1,9 +1,8 @@
 <?php
 
-use Lykegenes\LocaleSwitcher\CurrentConfig;
 use Lykegenes\LocaleSwitcher\LocaleSwitcher;
 
-class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
+class LocaleSwitcherTest extends Orchestra\Testbench\TestCase
 {
     /**
      * @var Mockery\MockInterface
@@ -16,55 +15,86 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
     protected $session;
 
     /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
      * @var LocaleSwitcher
      */
     protected $localeSwitcher;
 
     /**
-     * @var LocaleSwitcher
+     * @var ConfigManager
      */
-    protected $currentConfig;
+    protected $config;
 
     public function setUp()
     {
+        parent::setUp();
+
+        //$this->app = Mockery::mock('Illuminate\Foundation\Application');
         $this->request = Mockery::mock('Illuminate\Http\Request');
-        $this->container = Mockery::mock('Illuminate\Contracts\Container\Container');
         $this->session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
-        $this->currentConfig = Mockery::mock('Lykegenes\LocaleSwitcher\CurrentConfig');
+        $this->config = Mockery::mock('Lykegenes\LocaleSwitcher\ConfigManager');
 
         $this->session->shouldReceive('put')->zeroOrMoreTimes();
         $this->request->shouldReceive('getSession')->zeroOrMoreTimes()->andReturn($this->session);
-        $this->currentConfig->shouldReceive('isEnabledLocale')->zeroOrMoreTimes()->andReturn(true);
+        $this->config->shouldReceive('isEnabledLocale')->zeroOrMoreTimes()->andReturn(true);
 
-        $this->localeSwitcher = new LocaleSwitcher($this->session, $this->request, $this->currentConfig);
+        $this->localeSwitcher = new LocaleSwitcher($this->app, $this->config);
     }
 
     public function tearDown()
     {
         Mockery::close();
         $this->request = null;
-        $this->container = null;
         $this->session = null;
     }
 
     /** @test */
     public function it_uses_application_default_by_default()
     {
-        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
-        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn(null);
+        $this->config->shouldReceive('getSourceDrivers')->zeroOrMoreTimes()->andReturn([]);
 
-        $newLocale = $this->localeSwitcher->switchLocale();
+        $newLocale = $this->localeSwitcher->setAppLocale();
 
-        $this->assertFalse($this->localeSwitcher->localeWasSwitched());
         $this->assertNull($newLocale);
     }
 
     /** @test */
+    public function it_detects_locale_from_driver()
+    {
+        $this->config->shouldReceive('getSourceDrivers')->zeroOrMoreTimes()->andReturn([Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
+
+        $request = Mockery::mock('Illuminate\Http\Request');
+        $request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
+        $request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
+        $this->app->request = $request;
+
+        $newLocale = $this->localeSwitcher->detectLocale();
+
+        $this->assertEquals('fr', $newLocale);
+    }
+
+    /** @test */
+    public function it_detects_locale_from_drivers_in_correct_order()
+    {
+        $this->config->shouldReceive('getSourceDrivers')->zeroOrMoreTimes()->andReturn([
+            Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class,
+            Lykegenes\LocaleSwitcher\Drivers\SessiontDriver::class,
+        ]);
+
+        $request = Mockery::mock('Illuminate\Http\Request');
+        $request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
+        $request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
+        $this->app->request = $request;
+
+        $session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session->shouldNotReceive('has');
+        $session->shouldNotReceive('get');
+        $this->app->session = $session;
+
+        $newLocale = $this->localeSwitcher->detectLocale();
+
+        $this->assertEquals('fr', $newLocale);
+    }
+
     public function it_stores_locale_in_session()
     {
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
@@ -81,7 +111,6 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('fr', $newLocale);
     }
 
-    /** @test */
     public function it_switches_locale_from_request()
     {
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
@@ -96,7 +125,6 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('fr', $newLocale);
     }
 
-    /** @test */
     public function it_switches_locale_from_cookie()
     {
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
@@ -111,7 +139,6 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('fr', $newLocale);
     }
 
-    /** @test */
     public function it_uses_request_over_cookie()
     {
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
@@ -125,7 +152,6 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('fr', $newLocale);
     }
 
-    /** @test */
     public function it_sets_app_locale()
     {
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
@@ -141,7 +167,6 @@ class LocaleSwitcherTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('fr', $newLocale);
     }
 
-    /** @test */
     public function it_returns_enabled_locales()
     {
         $expected = [

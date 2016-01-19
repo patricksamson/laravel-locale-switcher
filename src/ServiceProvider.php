@@ -13,8 +13,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register()
     {
@@ -28,11 +26,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishes([$configPath => $this->getConfigPath()], 'config');
 
         $enabled = $this->app['config']->get('locale-switcher.enabled');
-        if (! $enabled) {
+        if (!$enabled) {
             return;
         }
 
-        $this->registerMiddleware('Lykegenes\LocaleSwitcher\Middleware\SwitchLocale');
+        $this->registerMiddleware('Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware');
     }
 
     /**

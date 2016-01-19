@@ -2,7 +2,7 @@
 
 namespace Lykegenes\LocaleSwitcher;
 
-class CurrentConfig
+class ConfigManager
 {
     /**
      * Check if this package is enabled or not.
@@ -14,21 +14,21 @@ class CurrentConfig
         return config('locale-switcher.enabled');
     }
 
-    /**
-     * Get the Http Get parameter used to switch locales.
-     *
-     * @return string
-     */
-    public static function getUrlParamKey()
+    public static function getSourceDrivers()
     {
-        return config('locale-switcher.URL_param_key');
+        return config('locale-switcher.source_drivers', []);
+    }
+
+    public static function getStoreDriver()
+    {
+        return config('locale-switcher.store_driver');
     }
 
     /**
      * Determine if this locale is enabled or not.
      * Depends on the current settings used.
      *
-     * @param  string  $locale The locale shorthand to verify
+     * @param string $locale The locale shorthand to verify
      *
      * @return bool
      */
@@ -44,7 +44,7 @@ class CurrentConfig
     /**
      * Get the localized name of the specified locale.
      *
-     * @param  string  $locale The locale shorthand to verify
+     * @param string $locale The locale shorthand to verify
      *
      * @return string
      */
