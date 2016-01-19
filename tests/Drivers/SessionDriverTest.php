@@ -34,7 +34,7 @@ class SessionDriverTest extends Orchestra\Testbench\TestCase
     {
         $this->session->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
 
-        $this->assertTrue($this->sessionDriver->has());
+        $this->assertTrue($this->sessionDriver->has('key'));
     }
 
     /** @test */
@@ -42,7 +42,7 @@ class SessionDriverTest extends Orchestra\Testbench\TestCase
     {
         $this->session->shouldReceive('get')->zeroOrMoreTimes()->andReturn('en');
 
-        $locale = $this->sessionDriver->get();
+        $locale = $this->sessionDriver->get('key');
 
         $this->assertEquals('en', $locale);
     }

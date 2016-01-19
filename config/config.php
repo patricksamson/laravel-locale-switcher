@@ -51,7 +51,7 @@ return array(
      *     http://my-app.com/some/page/?locale=en
      *
      */
-    'URL_param_key' => 'locale',
+    'default_key' => 'locale',
 
     /*
      *--------------------------------------------------------------------------

@@ -6,8 +6,6 @@ use Lykegenes\LocaleSwitcher\Contracts\DriverInterface;
 
 abstract class BaseDriver implements DriverInterface
 {
-    const DEFAULT_KEY = 'locale';
-
     public function has($key)
     {
         return false;

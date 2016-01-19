@@ -34,7 +34,7 @@ class RequestDriverTest extends Orchestra\Testbench\TestCase
     {
         $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
 
-        $this->assertTrue($this->requestDriver->has());
+        $this->assertTrue($this->requestDriver->has('key'));
     }
 
     /** @test */
@@ -42,7 +42,7 @@ class RequestDriverTest extends Orchestra\Testbench\TestCase
     {
         $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('en');
 
-        $locale = $this->requestDriver->get();
+        $locale = $this->requestDriver->get('key');
 
         $this->assertEquals('en', $locale);
     }

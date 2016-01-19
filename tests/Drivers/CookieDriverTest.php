@@ -34,7 +34,7 @@ class CookieDriverTest extends Orchestra\Testbench\TestCase
     {
         $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(true);
 
-        $this->assertTrue($this->cookieDriver->has());
+        $this->assertTrue($this->cookieDriver->has('key'));
     }
 
     /** @test */
@@ -42,7 +42,7 @@ class CookieDriverTest extends Orchestra\Testbench\TestCase
     {
         $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('en');
 
-        $locale = $this->cookieDriver->get();
+        $locale = $this->cookieDriver->get('key');
 
         $this->assertEquals('en', $locale);
     }

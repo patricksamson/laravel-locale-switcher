@@ -24,6 +24,11 @@ class ConfigManager
         return config('locale-switcher.store_driver');
     }
 
+    public static function getDefaultKey()
+    {
+        return config('locale-switcher.default_key');
+    }
+
     /**
      * Determine if this locale is enabled or not.
      * Depends on the current settings used.

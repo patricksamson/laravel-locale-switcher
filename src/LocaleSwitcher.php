@@ -16,7 +16,7 @@ class LocaleSwitcher
     protected $config;
 
     /**
-     * The detected locale
+     * The detected locale.
      *
      * @var string|null
      */
@@ -24,7 +24,6 @@ class LocaleSwitcher
 
     /**
      * Create a new locale switcher.
-     *
      */
     public function __construct(Application $app, ConfigManager $config)
     {
@@ -50,12 +49,13 @@ class LocaleSwitcher
     public function detectLocale()
     {
         $sourceDrivers = $this->config->getSourceDrivers();
+        $key = $this->config->getDefaultKey();
 
         foreach ($sourceDrivers as $driver) {
             $driver = $this->app->make($driver);
 
-            if ($driver instanceof BaseDriver && $driver->has()) {
-                $newLocale = $driver->get();
+            if ($driver instanceof BaseDriver && $driver->has($key)) {
+                $newLocale = $driver->get($key);
                 if ($this->config->isEnabledLocale($newLocale)) {
                     $this->locale = $newLocale;
 

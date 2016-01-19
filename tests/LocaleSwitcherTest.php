@@ -36,6 +36,7 @@ class LocaleSwitcherTest extends Orchestra\Testbench\TestCase
         $this->session->shouldReceive('put')->zeroOrMoreTimes();
         $this->request->shouldReceive('getSession')->zeroOrMoreTimes()->andReturn($this->session);
         $this->config->shouldReceive('isEnabledLocale')->zeroOrMoreTimes()->andReturn(true);
+        $this->config->shouldReceive('getDefaultKey')->zeroOrMoreTimes()->andReturn('locale');
 
         $this->localeSwitcher = new LocaleSwitcher($this->app, $this->config);
     }
