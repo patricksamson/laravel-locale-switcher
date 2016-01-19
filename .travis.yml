@@ -19,7 +19,7 @@ before_install:
   - travis_retry composer self-update
 
 install:
-  - travis_retry composer install --prefer-dist --no-interaction
+  - travis_retry composer install --prefer-source --no-interaction
 
 script:
   - phpunit --coverage-clover build/logs/clover.xml
