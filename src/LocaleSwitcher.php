@@ -73,7 +73,7 @@ class LocaleSwitcher
             $storeDriver = $this->config->getStoreDriver();
             $storeDriver = $this->app->make($storeDriver);
             if ($storeDriver instanceof BaseDriver) {
-                $storeDriver->store($storeDriver::DEFAULT_KEY, $this->locale);
+                $storeDriver->store($storeDriver->DEFAULT_KEY, $this->locale);
 
                 return $this->locale;
             }
