@@ -52,6 +52,6 @@ class SessionDriverTest extends Orchestra\Testbench\TestCase
     {
         $this->session->shouldReceive('put')->zeroOrMoreTimes()->andReturn(true);
 
-        $this->assertTrue($this->sessionDriver->store($this->sessionDriver::DEFAULT_KEY, 'en'));
+        $this->assertTrue($this->sessionDriver->store('key', 'en'));
     }
 }
