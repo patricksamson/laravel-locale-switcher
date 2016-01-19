@@ -25,6 +25,8 @@ class CookieDriverTest extends Orchestra\Testbench\TestCase
 
     public function tearDown()
     {
+        parent::tearDown();
+
         Mockery::close();
         $this->request = null;
     }

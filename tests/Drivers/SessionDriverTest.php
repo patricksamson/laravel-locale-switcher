@@ -25,6 +25,8 @@ class SessionDriverTest extends Orchestra\Testbench\TestCase
 
     public function tearDown()
     {
+        parent::tearDown();
+
         Mockery::close();
         $this->session = null;
     }

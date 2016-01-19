@@ -31,6 +31,11 @@ class LocaleSwitcher
         $this->config = $config;
     }
 
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
+
     /**
      * Get an array of all the enabled locales.
      *
@@ -51,15 +56,17 @@ class LocaleSwitcher
         $sourceDrivers = $this->config->getSourceDrivers();
         $key = $this->config->getDefaultKey();
 
-        foreach ($sourceDrivers as $driver) {
-            $driver = $this->app->make($driver);
+        if (!empty($sourceDrivers) && is_string($key)) {
+            foreach ($sourceDrivers as $driver) {
+                $driver = $this->app->make($driver);
 
-            if ($driver instanceof BaseDriver && $driver->has($key)) {
-                $newLocale = $driver->get($key);
-                if ($this->config->isEnabledLocale($newLocale)) {
-                    $this->locale = $newLocale;
+                if ($driver instanceof BaseDriver && $driver->has($key)) {
+                    $newLocale = $driver->get($key);
+                    if ($this->config->isEnabledLocale($newLocale)) {
+                        $this->locale = $newLocale;
 
-                    return $newLocale;
+                        return $newLocale;
+                    }
                 }
             }
         }
@@ -69,9 +76,11 @@ class LocaleSwitcher
 
     public function storeLocale()
     {
-        if ($this->locale !== null) {
-            $storeDriver = $this->config->getStoreDriver();
+        $storeDriver = $this->config->getStoreDriver();
+
+        if ($this->locale !== null && !empty($storeDriver)) {
             $storeDriver = $this->app->make($storeDriver);
+
             if ($storeDriver instanceof BaseDriver) {
                 $storeDriver->store($storeDriver->DEFAULT_KEY, $this->locale);
 

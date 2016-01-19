@@ -28,21 +28,23 @@ class LocaleSwitcherTest extends Orchestra\Testbench\TestCase
     {
         parent::setUp();
 
-        //$this->app = Mockery::mock('Illuminate\Foundation\Application');
         $this->request = Mockery::mock('Illuminate\Http\Request');
         $this->session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
         $this->config = Mockery::mock('Lykegenes\LocaleSwitcher\ConfigManager');
 
-        $this->session->shouldReceive('put')->zeroOrMoreTimes();
-        $this->request->shouldReceive('getSession')->zeroOrMoreTimes()->andReturn($this->session);
         $this->config->shouldReceive('isEnabledLocale')->zeroOrMoreTimes()->andReturn(true);
         $this->config->shouldReceive('getDefaultKey')->zeroOrMoreTimes()->andReturn('locale');
+
+        $this->app->request = $this->request;
+        $this->app->session = $this->session;
 
         $this->localeSwitcher = new LocaleSwitcher($this->app, $this->config);
     }
 
     public function tearDown()
     {
+        parent::tearDown();
+
         Mockery::close();
         $this->request = null;
         $this->session = null;
@@ -52,6 +54,7 @@ class LocaleSwitcherTest extends Orchestra\Testbench\TestCase
     public function it_uses_application_default_by_default()
     {
         $this->config->shouldReceive('getSourceDrivers')->zeroOrMoreTimes()->andReturn([]);
+        $this->config->shouldReceive('getStoreDriver')->zeroOrMoreTimes()->andReturn(null);
 
         $newLocale = $this->localeSwitcher->setAppLocale();
 
@@ -63,10 +66,8 @@ class LocaleSwitcherTest extends Orchestra\Testbench\TestCase
     {
         $this->config->shouldReceive('getSourceDrivers')->zeroOrMoreTimes()->andReturn([Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
 
-        $request = Mockery::mock('Illuminate\Http\Request');
-        $request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
-        $request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
-        $this->app->request = $request;
+        $this->request->shouldReceive('has')->once()->andReturn(true);
+        $this->request->shouldReceive('input')->once()->andReturn('fr');
 
         $newLocale = $this->localeSwitcher->detectLocale();
 
@@ -81,100 +82,52 @@ class LocaleSwitcherTest extends Orchestra\Testbench\TestCase
             Lykegenes\LocaleSwitcher\Drivers\SessiontDriver::class,
         ]);
 
-        $request = Mockery::mock('Illuminate\Http\Request');
-        $request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
-        $request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
-        $this->app->request = $request;
+        $this->request->shouldReceive('has')->once()->andReturn(true);
+        $this->request->shouldReceive('input')->once()->andReturn('fr');
 
-        $session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
-        $session->shouldNotReceive('has');
-        $session->shouldNotReceive('get');
-        $this->app->session = $session;
+        $this->session->shouldNotReceive('has');
+        $this->session->shouldNotReceive('get');
 
         $newLocale = $this->localeSwitcher->detectLocale();
 
         $this->assertEquals('fr', $newLocale);
     }
 
-    public function it_stores_locale_in_session()
+    public function it_stores_locale_in_driver()
     {
-        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
-        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn(null);
-        $this->session->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
-        $this->session->shouldReceive('get')->zeroOrMoreTimes()->andReturn('fr');
+        $this->config->shouldReceive('getStoreDriver')->once()->andReturn(Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class);
+        $this->session->shouldReceive('put')->once()->andReturn(true);
 
-        $newLocale = $this->localeSwitcher->switchLocale('fr');
+        $this->localeSwitcher->setLocale('fr');
 
-        $this->assertTrue($this->localeSwitcher->localeWasSwitched());
-        $this->assertTrue($this->localeSwitcher->sessionHasLocale());
-        $this->assertEquals('fr', $this->localeSwitcher->getLocaleFromSession());
-        $this->assertNotEquals('', $newLocale);
-        $this->assertEquals('fr', $newLocale);
+        $newStoreLocale = $this->localeSwitcher->storeLocale();
+
+        $this->assertEquals('fr', $newStoreLocale);
     }
 
-    public function it_switches_locale_from_request()
+    /** @test */
+    public function it_sets_application_locale()
     {
-        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
-        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn(null);
-        $this->request->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
+        $this->config->shouldReceive('getSourceDrivers')->zeroOrMoreTimes()->andReturn([Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
+        $this->request->shouldReceive('has')->once()->andReturn(true);
+        $this->request->shouldReceive('input')->once()->andReturn('fr');
 
-        $newLocale = $this->localeSwitcher->switchLocale();
-
-        $this->assertTrue($this->localeSwitcher->localeWasSwitched());
-        $this->assertTrue($this->localeSwitcher->requestHasLocale());
-        $this->assertNotEquals('', $newLocale);
-        $this->assertEquals('fr', $newLocale);
-    }
-
-    public function it_switches_locale_from_cookie()
-    {
-        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn(null);
-        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('fr');
-        $this->request->shouldReceive('hasCookie')->zeroOrMoreTimes()->andReturn(true);
-
-        $newLocale = $this->localeSwitcher->switchLocale();
-
-        $this->assertTrue($this->localeSwitcher->localeWasSwitched());
-        $this->assertTrue($this->localeSwitcher->cookieHasLocale());
-        $this->assertNotEquals('', $newLocale);
-        $this->assertEquals('fr', $newLocale);
-    }
-
-    public function it_uses_request_over_cookie()
-    {
-        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
-        $this->request->shouldReceive('cookie')->zeroOrMoreTimes()->andReturn('en');
-
-        $newLocale = $this->localeSwitcher->switchLocale();
-
-        $this->assertTrue($this->localeSwitcher->localeWasSwitched());
-        $this->assertNotEquals('', $newLocale);
-        $this->assertNotEquals('en', $newLocale);
-        $this->assertEquals('fr', $newLocale);
-    }
-
-    public function it_sets_app_locale()
-    {
-        $this->request->shouldReceive('input')->zeroOrMoreTimes()->andReturn('fr');
-        $this->session->shouldReceive('has')->zeroOrMoreTimes()->andReturn(true);
-        $this->session->shouldReceive('get')->zeroOrMoreTimes()->andReturn('fr');
-        Illuminate\Support\Facades\App::shouldReceive('setLocale')->once();
+        $this->config->shouldReceive('getStoreDriver')->zeroOrMoreTimes()->andReturn(null);
 
         $newLocale = $this->localeSwitcher->setAppLocale();
 
-        $this->assertTrue($this->localeSwitcher->localeWasSwitched());
-        $this->assertNotEquals('', $newLocale);
-        $this->assertNotEquals('en', $newLocale);
         $this->assertEquals('fr', $newLocale);
+        $this->assertEquals('fr', $this->app->getLocale());
     }
 
+    /** @test */
     public function it_returns_enabled_locales()
     {
         $expected = [
             'en' => 'English',
             'fr' => 'Français',
         ];
-        $this->currentConfig->shouldReceive('getEnabledLocales')->zeroOrMoreTimes()->andReturn($expected);
+        $this->config->shouldReceive('getEnabledLocales')->zeroOrMoreTimes()->andReturn($expected);
 
         $locales = $this->localeSwitcher->getEnabledLocales();
 
