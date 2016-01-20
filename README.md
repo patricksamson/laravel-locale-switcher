@@ -21,9 +21,16 @@ Then, add this to your Service Providers :
 Lykegenes\LocaleSwitcher\ServiceProvider::class,
 ```
 
-and add this Alias
+and add this Alias [Optional]
 ``` php
 'LocaleSwitcher' => Lykegenes\LocaleSwitcher\Facades\LocaleSwitcher::class,
+```
+
+Finally, you will need to register this Middleware either in your `Kernel.php` or directly in your routes.
+This way, you can control which routes will have automatic locale detection (Web pages) or not (your API).
+Make sure this middleware is placed **after** any Session or Cookie related middlewares from the framework.
+``` php
+\Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class,
 ```
 
 Optionally, you can publish and edit the configuration file :
@@ -53,12 +60,6 @@ $url = url('/some/url', ['locale' => 'en']);
 You can easily generate a dropdown using the [laravelcollective/html](https://github.com/LaravelCollective/html) package :
 ```php
 HTML::ul(LocaleSwitcher::getEnabledLocales());
-```
-
-## Testing
-
-``` bash
-composer test
 ```
 
 ## Credits

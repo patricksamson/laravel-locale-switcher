@@ -29,8 +29,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         if (!$enabled) {
             return;
         }
-
-        $this->registerMiddleware('Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware');
     }
 
     /**

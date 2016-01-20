@@ -18,7 +18,7 @@ return array(
      *
      * These are the drivers that will be used to determine the current Locale.
      *
-     * The Drivers will be used in this order, and if no Locale is found,
+     * The Drivers will be used in this order, and if no locale is found,
      * the Application default locale will be used.
      *
      */
@@ -36,19 +36,20 @@ return array(
      *
      * This is the driver that will be used to store the locale for future requests.
      *
+     * The included drivers are :
+     * Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class, (default)
+     * Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class,
+     *
      */
     'store_driver' => Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class,
 
     /*
      *--------------------------------------------------------------------------
-     * LocaleSwitcher URL parameter key prefix
+     * LocaleSwitcher Driver Key
      *--------------------------------------------------------------------------
      *
-     * Sometimes you want to set the URL parameter key to be used by LocaleSwitcher
-     * to use to detect locale switching requests.
-     *
-     * By default, it is "locale", so the URL will be :
-     *     http://my-app.com/some/page/?locale=en
+     * This key will be used by all the included drivers to detect and store
+     * the locale across requests.
      *
      */
     'default_key' => 'locale',
