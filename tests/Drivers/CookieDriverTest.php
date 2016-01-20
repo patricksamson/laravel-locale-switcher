@@ -9,6 +9,8 @@ class CookieDriverTest extends Orchestra\Testbench\TestCase
      */
     protected $request;
 
+    protected $cookieJar;
+
     /**
      * @var Lykegenes\LocaleSwitcher\Drivers\CookieDriver
      */
@@ -19,8 +21,9 @@ class CookieDriverTest extends Orchestra\Testbench\TestCase
         parent::setUp();
 
         $this->request = Mockery::mock('Illuminate\Http\Request');
+        $this->cookieJar = Mockery::mock('Illuminate\Cookie\CookieJar');
 
-        $this->cookieDriver = new CookieDriver($this->request);
+        $this->cookieDriver = new CookieDriver($this->request, $this->cookieJar);
     }
 
     public function tearDown()
@@ -29,6 +32,7 @@ class CookieDriverTest extends Orchestra\Testbench\TestCase
 
         Mockery::close();
         $this->request = null;
+        $this->cookieJar = null;
     }
 
     /** @test */
@@ -47,5 +51,13 @@ class CookieDriverTest extends Orchestra\Testbench\TestCase
         $locale = $this->cookieDriver->get('key');
 
         $this->assertEquals('en', $locale);
+    }
+
+    /** @test */
+    public function it_stores_locale_in_session()
+    {
+        $this->cookieJar->shouldReceive('queue')->atLeast()->once()->andReturn(true);
+
+        $this->assertTrue($this->cookieDriver->store('key', 'en'));
     }
 }
