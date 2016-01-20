@@ -79,7 +79,7 @@ class LocaleSwitcherTest extends Orchestra\Testbench\TestCase
     {
         $this->config->shouldReceive('getSourceDrivers')->zeroOrMoreTimes()->andReturn([
             Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class,
-            Lykegenes\LocaleSwitcher\Drivers\SessiontDriver::class,
+            Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class,
         ]);
 
         $this->request->shouldReceive('has')->once()->andReturn(true);
@@ -93,16 +93,23 @@ class LocaleSwitcherTest extends Orchestra\Testbench\TestCase
         $this->assertEquals('fr', $newLocale);
     }
 
-    public function it_stores_locale_in_driver()
+    /** @test */
+    public function it_ignores_empty_drivers()
     {
-        $this->config->shouldReceive('getStoreDriver')->once()->andReturn(Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class);
-        $this->session->shouldReceive('put')->once()->andReturn(true);
+        $this->config->shouldReceive('getSourceDrivers')->zeroOrMoreTimes()->andReturn([
+            Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class,
+            Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class,
+        ]);
 
-        $this->localeSwitcher->setLocale('fr');
+        $this->request->shouldReceive('has')->once()->andReturn(false);
+        $this->request->shouldNotReceive('input');
 
-        $newStoreLocale = $this->localeSwitcher->storeLocale();
+        $this->session->shouldReceive('has')->once()->andReturn(true);
+        $this->session->shouldReceive('get')->once()->andReturn('fr');
 
-        $this->assertEquals('fr', $newStoreLocale);
+        $newLocale = $this->localeSwitcher->detectLocale();
+
+        $this->assertEquals('fr', $newLocale);
     }
 
     /** @test */
