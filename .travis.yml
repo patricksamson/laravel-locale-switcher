@@ -14,9 +14,14 @@ cache:
 addons:
   code_climate:
     repo_token: e9d8026b4a1ca0f1c3577c3772bbe9d8d337f0cb2ee50642d2047efa8a148327
+    
+env:
+  matrix:
+    - PREFER_LOWEST="--prefer-lowest"
+    - PREFER_LOWEST=""
 
 install:
-  - travis_retry composer install --prefer-source --no-interaction
+  - travis_retry composer install --prefer-source --no-interaction --prefer-stable $PREFER_LOWEST
 
 script:
   - phpunit --coverage-clover build/logs/clover.xml
