@@ -60,4 +60,15 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
         $this->makeRequest('GET', 'locale', [], ['locale' => 'fr'])
             ->see('hello world, locale is : fr');
     }
+
+    /** @test */
+    public function testDetectLocaleFromRouteParameter()
+    {
+        $this->app['router']->get('{locale}/parametertest', ['middleware' => \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class, function () {
+            return 'hello world, locale is : '.\App::getLocale();
+        }]);
+
+        $this->visit('fr/parametertest')
+            ->see('hello world, locale is : fr');
+    }
 }
