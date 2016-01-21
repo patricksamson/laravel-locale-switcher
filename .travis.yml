@@ -3,6 +3,7 @@ language: php
 sudo: false
 
 php:
+  - 5.5.9
   - 5.6
   - 7.0
   - hhvm
@@ -16,15 +17,23 @@ addons:
     repo_token: e9d8026b4a1ca0f1c3577c3772bbe9d8d337f0cb2ee50642d2047efa8a148327
 
 env:
-  matrix:
-    - PREFER_LOWEST="--prefer-lowest"
-    - PREFER_LOWEST=""
+  global:
+    - setup=basic
+
+matrix:
+  include:
+    - php: 5.5.9
+      env: setup=lowest
+    - php: 5.5.9
+      env: setup=stable
 
 install:
-  - travis_retry composer update --prefer-source --no-interaction --prefer-stable $PREFER_LOWEST
+  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
 
 script:
-  - phpunit --coverage-clover build/logs/clover.xml
+  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_script:
   - vendor/bin/test-reporter
