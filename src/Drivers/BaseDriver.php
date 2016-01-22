@@ -4,6 +4,9 @@ namespace Lykegenes\LocaleSwitcher\Drivers;
 
 use Lykegenes\LocaleSwitcher\Contracts\DriverInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class BaseDriver implements DriverInterface
 {
     public function has($key)
