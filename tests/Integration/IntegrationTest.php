@@ -71,4 +71,26 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
         $this->visit('fr/parametertest')
             ->see('hello world, locale is : fr');
     }
+
+    /** @test */
+    public function testStoreLocaleInSession()
+    {
+        $this->app['config']->set('locale-switcher.store_driver', \Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class);
+
+        $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
+            ->see('hello world, locale is : fr')
+            ->seeInSession('locale', 'fr');
+    }
+
+    /** @test */
+    public function testStoreLocaleInCookie()
+    {
+        $this->app['config']->set('locale-switcher.store_driver', \Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class);
+
+        $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
+            ->see('hello world, locale is : fr');
+
+        $this->assertTrue($this->app['cookie']->hasQueued('locale'));
+        $this->assertEquals('fr', $this->app['cookie']->queued('locale')->getValue());
+    }
 }
