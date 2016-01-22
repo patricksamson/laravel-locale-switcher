@@ -15,6 +15,9 @@ cache:
 env:
   global:
     - setup=basic
+    - COMPOSER_DISCARD_CHANGES=true
+    - COMPOSER_NO_INTERACTION=1
+    - COMPOSER_DISABLE_XDEBUG_WARN=1
 
 matrix:
   include:
@@ -27,9 +30,9 @@ before_install:
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
 
 install:
-  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-dist; fi
-  - if [[ $setup = 'stable' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-stable; fi
-  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-stable --prefer-lowest; fi
+  - if [[ $setup = 'basic' ]]; then travis_retry composer update --prefer-dist; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --prefer-stable --prefer-lowest; fi
 
 script:
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
