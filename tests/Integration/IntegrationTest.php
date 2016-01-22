@@ -27,9 +27,15 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
     {
         $app['config']->set('app.locale', 'en');
 
-        $app['router']->get('locale', ['middleware' => \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class, function () {
-            return 'hello world, locale is : '.\App::getLocale();
-        }]);
+        $app['router']->get('locale', [
+            'middleware' => [
+                \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class,
+                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            ],
+            function () {
+                return 'hello world, locale is : '.\App::getLocale();
+            },
+        ]);
     }
 
     /** @test */
@@ -79,7 +85,7 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
 
         $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
             ->see('hello world, locale is : fr')
-            ->seeInSession('locale', 'fr');
+            ->assertSessionHas('locale', 'fr');
     }
 
     /** @test */
@@ -88,9 +94,7 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
         $this->app['config']->set('locale-switcher.store_driver', \Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class);
 
         $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
-            ->see('hello world, locale is : fr');
-
-        $this->assertTrue($this->app['cookie']->hasQueued('locale'));
-        $this->assertEquals('fr', $this->app['cookie']->queued('locale')->getValue());
+            ->see('hello world, locale is : fr')
+            ->seeCookie('locale', 'fr');
     }
 }
