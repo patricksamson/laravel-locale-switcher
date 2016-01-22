@@ -22,7 +22,7 @@ class BrowserDriver extends BaseDriver
 
     public function has($key = self::DEFAULT_KEY)
     {
-        return !isnull($this->request->header($key, null));
+        return ! isnull($this->request->header($key, null));
     }
 
     public function get($key = self::DEFAULT_KEY, $default = null)
