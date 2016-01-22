@@ -22,6 +22,9 @@ matrix:
       env: setup=lowest
     - php: 5.6
       env: setup=stable
+      
+before_install:
+  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
 
 install:
   - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-dist; fi
