@@ -12,10 +12,6 @@ cache:
     - vendor
     - $HOME/.composer/cache
 
-addons:
-  code_climate:
-    repo_token: e9d8026b4a1ca0f1c3577c3772bbe9d8d337f0cb2ee50642d2047efa8a148327
-
 env:
   global:
     - setup=basic
@@ -28,16 +24,12 @@ matrix:
       env: setup=stable
 
 install:
-  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
-  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
-  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
-  - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.0/coveralls.phar && chmod +x coveralls.phar
+  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-dist; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-stable --prefer-lowest; fi
 
 script:
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-
-after_script:
-  - vendor/bin/test-reporter
 
 after_success:
   - travis_retry php vendor/bin/coveralls
