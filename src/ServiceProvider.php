@@ -26,7 +26,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishes([$configPath => $this->getConfigPath()], 'config');
 
         $enabled = $this->app['config']->get('locale-switcher.enabled');
-        if (!$enabled) {
+        if (! $enabled) {
             return;
         }
     }

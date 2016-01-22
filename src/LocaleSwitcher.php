@@ -56,7 +56,7 @@ class LocaleSwitcher
         $sourceDrivers = $this->config->getSourceDrivers();
         $key = $this->config->getDefaultKey();
 
-        if (!empty($sourceDrivers) && is_string($key)) {
+        if (! empty($sourceDrivers) && is_string($key)) {
             foreach ($sourceDrivers as $driver) {
                 $driver = class_exists($driver) ? $this->app->make($driver) : null;
 
@@ -79,7 +79,7 @@ class LocaleSwitcher
         $storeDriver = $this->config->getStoreDriver();
         $key = $this->config->getDefaultKey();
 
-        if ($this->locale !== null && !empty($storeDriver)) {
+        if ($this->locale !== null && ! empty($storeDriver)) {
             $storeDriver = $this->app->make($storeDriver);
 
             if ($storeDriver instanceof BaseDriver) {
