@@ -31,21 +31,6 @@ class LocaleSwitcher
         $this->config = $config;
     }
 
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-    }
-
-    /**
-     * Get an array of all the enabled locales.
-     *
-     * @return array
-     */
-    public function getEnabledLocales()
-    {
-        return $this->config->getEnabledLocales();
-    }
-
     /**
      * Attempt to detected the new locale from the enabled drivers.
      *

@@ -2,6 +2,9 @@
 
 namespace Lykegenes\LocaleSwitcher;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
