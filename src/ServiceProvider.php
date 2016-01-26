@@ -58,15 +58,4 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $this->publishes([$configPath => config_path('locale-switcher.php')], 'config');
     }
-
-    /**
-     * Register the Debugbar Middleware.
-     *
-     * @param string $middleware
-     */
-    protected function registerMiddleware($middleware)
-    {
-        $kernel = $this->app['Illuminate\Contracts\Http\Kernel'];
-        $kernel->pushMiddleware($middleware);
-    }
 }

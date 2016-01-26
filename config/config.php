@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     /*
      *--------------------------------------------------------------------------
      * LocaleSwitcher Settings
@@ -26,7 +26,7 @@ return array(
         Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class,
         Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class,
         Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class,
-        Lykegenes\LocaleSwitcher\Drivers\RouteParameterDriver::class,
+        // Lykegenes\LocaleSwitcher\Drivers\RouteParameterDriver::class,
         // Lykegenes\LocaleSwitcher\Drivers\BrowserDriver::class,
     ],
 
@@ -69,4 +69,4 @@ return array(
         'fr' => 'Français',
     ],
 
-);
+];
