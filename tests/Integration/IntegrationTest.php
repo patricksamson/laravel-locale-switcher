@@ -70,6 +70,8 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
     /** @test */
     public function testDetectLocaleFromRouteParameter()
     {
+        $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RouteParameterDriver::class]);
+
         $this->app['router']->get('{locale}/parametertest', ['middleware' => \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class, function () {
             return 'hello world, locale is : '.\App::getLocale();
         }]);
