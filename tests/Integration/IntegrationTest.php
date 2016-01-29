@@ -48,6 +48,8 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
     /** @test */
     public function testDetectLocaleFromRequestUrl()
     {
+        $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
+
         $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
             ->see('hello world, locale is : fr');
     }
@@ -55,6 +57,8 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
     /** @test */
     public function testDetectLocaleFromSession()
     {
+        $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class]);
+
         $this->withSession(['locale' => 'fr'])
             ->visit('locale')
             ->see('hello world, locale is : fr');
@@ -63,6 +67,8 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
     /** @test */
     public function testDetectLocaleFromCookie()
     {
+        $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class]);
+
         $this->makeRequest('GET', 'locale', [], ['locale' => 'fr'])
             ->see('hello world, locale is : fr');
     }
@@ -83,6 +89,7 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
     /** @test */
     public function testStoreLocaleInSession()
     {
+        $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
         $this->app['config']->set('locale-switcher.store_driver', \Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class);
 
         $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
@@ -93,6 +100,7 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
     /** @test */
     public function testStoreLocaleInCookie()
     {
+        $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
         $this->app['config']->set('locale-switcher.store_driver', \Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class);
 
         $this->makeRequest('GET', 'locale', ['locale' => 'fr'])

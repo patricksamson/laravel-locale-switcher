@@ -23,11 +23,11 @@ return [
      *
      */
     'source_drivers' => [
-        Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class,
-        Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class,
-        Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class,
-        // Lykegenes\LocaleSwitcher\Drivers\RouteParameterDriver::class,
-        // Lykegenes\LocaleSwitcher\Drivers\BrowserDriver::class,
+        Lykegenes\LocaleSwitcher\Drivers\RouteParameterDriver::class, // Laravel Route parameter
+        // Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class, // URL query string
+        // Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class, // Cookie
+        // Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class, // Laravel Session
+        // Lykegenes\LocaleSwitcher\Drivers\BrowserDriver::class, // Browser Accept-Language header
     ],
 
     /*
@@ -36,13 +36,15 @@ return [
      *--------------------------------------------------------------------------
      *
      * This is the driver that will be used to store the locale for future requests.
+     * It is set to null by default in order to detect the locale on every request.
+     * Only one can be used!
      *
      * The included drivers are :
-     * Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class, (default)
+     * Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class,
      * Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class,
      *
      */
-    'store_driver' => Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class,
+    'store_driver' => null,
 
     /*
      *--------------------------------------------------------------------------
