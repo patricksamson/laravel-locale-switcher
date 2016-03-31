@@ -26,7 +26,7 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
     {
         $app['config']->set('app.locale', 'en');
 
-        // Switch Locale from route parameter
+        // Detect Locale from route parameter
         $app['router']->get('{locale}/something', [
             'as' => 'route-parameter',
             'middleware' => [
@@ -36,7 +36,7 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
             'uses' => TestHelperController::$route_parameter,
         ]);
 
-        // Switch Locale using Query String
+        // Detect Locale using Query String
         $app['router']->get('something', [
             'as' => 'route-querystring',
             'middleware' => [
@@ -44,6 +44,34 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
                 \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             ],
             'uses' => TestHelperController::$route_querystring,
+        ]);
+
+        // Named switch locale route
+        $app['router']->get('named/{newLocale}', [
+            'as' => 'named-switch-locale',
+            'middleware' => [
+                \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class,
+                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            ],
+            'uses' => TestHelperController::$named_switch_locale,
+        ]);
+
+        $app['router']->get('action/{newLocale}', [
+            'middleware' => [
+                \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class,
+                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            ],
+            'uses' => TestHelperController::$action_switch_locale,
+        ]);
+
+        $app['router']->get('closure/{newLocale}', [
+            'middleware' => [
+                \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class,
+                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            ],
+            function ($newLocale) {
+                return 'hello world, url is : '.switch_locale($newLocale);
+            },
         ]);
     }
 
@@ -102,12 +130,32 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
         $this->makeRequest('GET', action_localized(TestHelperController::$route_querystring))
              ->see('hello world, locale is : fr');
     }
+
+    /**
+     * @test
+     */
+    public function testSwitchLocaleHelperWithQueryString()
+    {
+        // Query string has to be appended
+        $this->makeRequest('GET', route_localized('named-switch-locale', ['newLocale' => 'fr']))
+             ->see('http://localhost/named/fr?locale=fr');
+
+        // Query String has to be appended
+        $this->makeRequest('GET', action_localized(TestHelperController::$action_switch_locale, ['newLocale' => 'fr']))
+             ->see('http://localhost/action/fr?locale=fr');
+
+        // We can't match a Closure. Return the exact same urkl, without the query string
+        $this->makeRequest('GET', '/closure/fr')
+             ->see('http://localhost/closure/fr');
+    }
 }
 
 class TestHelperController extends \Illuminate\Routing\Controller
 {
     public static $route_parameter = 'Lykegenes\LocaleSwitcher\TestCase\TestHelperController@route_parameter';
     public static $route_querystring = 'Lykegenes\LocaleSwitcher\TestCase\TestHelperController@route_querystring';
+    public static $named_switch_locale = 'Lykegenes\LocaleSwitcher\TestCase\TestHelperController@named_switch_locale';
+    public static $action_switch_locale = 'Lykegenes\LocaleSwitcher\TestCase\TestHelperController@action_switch_locale';
 
     public function route_parameter()
     {
@@ -117,5 +165,15 @@ class TestHelperController extends \Illuminate\Routing\Controller
     public function route_querystring()
     {
         return 'hello world, locale is : '.\App::getLocale();
+    }
+
+    public function named_switch_locale($newLocale)
+    {
+        return 'hello world, url is : '.switch_locale($newLocale);
+    }
+
+    public function action_switch_locale($newLocale)
+    {
+        return 'hello world, url is : '.switch_locale($newLocale);
     }
 }
