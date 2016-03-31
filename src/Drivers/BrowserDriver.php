@@ -65,7 +65,5 @@ class BrowserDriver extends BaseDriver
                 return $locale['locale'];
             }
         }
-
-        return;
     }
 }

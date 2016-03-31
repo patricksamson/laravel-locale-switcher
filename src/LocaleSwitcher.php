@@ -55,8 +55,6 @@ class LocaleSwitcher
                 }
             }
         }
-
-        return;
     }
 
     public function storeLocale()
@@ -73,8 +71,6 @@ class LocaleSwitcher
                 return $this->locale;
             }
         }
-
-        return;
     }
 
     /**

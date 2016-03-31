@@ -50,11 +50,10 @@ http://my-app.com/some/sub/route?locale=es&otherParam=value
 ```
 This will store the locale in the user's session, and set it as the current locale everytime the user requests a page.
 
-You can build the routes like so :
+You can build the routes with the included helpers. The URLs will be generated using the current locale.
 ```php
-$url = action('SomeController@someFunction', ['locale' => 'en']);
-$url = route('someNamedRoute', ['locale' => 'en']);
-$url = url('/some/url', ['locale' => 'en']);
+$url = action_localized('SomeController@someFunction', ['your' => 'parameters']);
+$url = route_localized('someNamedRoute', ['your' => 'parameters']);
 ```
 
 You can easily generate a dropdown using the [laravelcollective/html](https://github.com/LaravelCollective/html) package :
