@@ -7,8 +7,7 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
     /**
      * Get package providers.
      *
-     * @param \Illuminate\Foundation\Application $app
-     *
+     * @param  \Illuminate\Foundation\Application $app
      * @return array
      */
     protected function getPackageProviders($app)
@@ -38,42 +37,52 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
         ]);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function testGetLocaleRoute()
     {
         $this->visit('locale')
-            ->see('hello world, locale is : en');
+             ->see('hello world, locale is : en');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function testDetectLocaleFromRequestUrl()
     {
         $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
 
         $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
-            ->see('hello world, locale is : fr');
+             ->see('hello world, locale is : fr');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function testDetectLocaleFromSession()
     {
         $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class]);
 
         $this->withSession(['locale' => 'fr'])
-            ->visit('locale')
-            ->see('hello world, locale is : fr');
+             ->visit('locale')
+             ->see('hello world, locale is : fr');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function testDetectLocaleFromCookie()
     {
         $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class]);
 
         $this->makeRequest('GET', 'locale', [], ['locale' => 'fr'])
-            ->see('hello world, locale is : fr');
+             ->see('hello world, locale is : fr');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function testDetectLocaleFromRouteParameter()
     {
         $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RouteParameterDriver::class]);
@@ -83,28 +92,32 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
         }]);
 
         $this->visit('fr/parametertest')
-            ->see('hello world, locale is : fr');
+             ->see('hello world, locale is : fr');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function testStoreLocaleInSession()
     {
         $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
         $this->app['config']->set('locale-switcher.store_driver', \Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class);
 
         $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
-            ->see('hello world, locale is : fr')
-            ->assertSessionHas('locale', 'fr');
+             ->see('hello world, locale is : fr')
+             ->assertSessionHas('locale', 'fr');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function testStoreLocaleInCookie()
     {
         $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
         $this->app['config']->set('locale-switcher.store_driver', \Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class);
 
         $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
-            ->see('hello world, locale is : fr')
-            ->seeCookie('locale', 'fr');
+             ->see('hello world, locale is : fr')
+             ->seeCookie('locale', 'fr');
     }
 }

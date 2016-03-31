@@ -29,7 +29,8 @@
 	"autoload": {
 		"psr-4": {
 			"Lykegenes\\LocaleSwitcher\\": "src/"
-		}
+		},
+        "files": ["src/helpers.php"]
 	},
 	"scripts": {
 		"test": "phpunit"

@@ -25,7 +25,7 @@ class BrowserDriver extends BaseDriver
 
     public function has($key = 'Accept-Language')
     {
-        return ! is_null($this->request->header($key, null));
+        return null !== $this->request->header($key, null);
     }
 
     public function get($key = 'Accept-Language', $default = null)
@@ -45,7 +45,7 @@ class BrowserDriver extends BaseDriver
         foreach ($languages as $item) {
             $split = explode(';', $item);
             $locales[] = [
-                'locale' => $split [0],
+                'locale' => $split[0],
                 'q' => (array_key_exists(1, $split) && substr($split[1], 0, 2) === 'q=') ? (float) substr($split[1], 2) : 1.0,
             ];
         }
