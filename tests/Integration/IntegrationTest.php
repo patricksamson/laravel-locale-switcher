@@ -55,6 +55,10 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
 
         $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
              ->see('hello world, locale is : fr');
+
+        // switch to new locale on subsequent request
+        $this->makeRequest('GET', 'locale', ['locale' => 'en'])
+             ->see('hello world, locale is : en');
     }
 
     /**
@@ -93,6 +97,10 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
 
         $this->visit('fr/parametertest')
              ->see('hello world, locale is : fr');
+
+        // switch to new locale on subsequent request
+        $this->visit('en/parametertest')
+             ->see('hello world, locale is : en');
     }
 
     /**
@@ -106,6 +114,11 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
         $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
              ->see('hello world, locale is : fr')
              ->assertSessionHas('locale', 'fr');
+
+        // switch to new locale on subsequent request
+        $this->makeRequest('GET', 'locale', ['locale' => 'en'])
+             ->see('hello world, locale is : en')
+             ->assertSessionHas('locale', 'en');
     }
 
     /**
@@ -119,5 +132,10 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
         $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
              ->see('hello world, locale is : fr')
              ->seeCookie('locale', 'fr');
+
+        // switch to new locale on subsequent request
+        $this->makeRequest('GET', 'locale', ['locale' => 'en'])
+             ->see('hello world, locale is : en')
+             ->seeCookie('locale', 'en');
     }
 }
