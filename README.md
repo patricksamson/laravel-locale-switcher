@@ -56,6 +56,12 @@ $url = action_localized('SomeController@someFunction', ['your' => 'parameters'])
 $url = route_localized('someNamedRoute', ['your' => 'parameters']);
 ```
 
+To build a URL to the same page, but with a different locale, use the `switch_locale()` helper.
+```php
+$url = switch_locale('fr'); // URL of the French version of the current page.
+```
+
+
 You can easily generate a dropdown using the [laravelcollective/html](https://github.com/LaravelCollective/html) package :
 ```php
 HTML::ul(LocaleSwitcher::getEnabledLocales());
