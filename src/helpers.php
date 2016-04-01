@@ -48,7 +48,7 @@ if ( ! function_exists('switch_locale')) {
      */
     function switch_locale($newLocale)
     {
-        $route = request()->route();
+        $route = app('request')->route();
 
         $locale = [ConfigManager::getDefaultKey() => $newLocale];
 
