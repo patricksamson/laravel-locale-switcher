@@ -70,6 +70,6 @@ if ( ! function_exists('switch_locale')) {
         }
 
         // return the current URL
-        return request()->url();
+        return app('request')->url();
     }
 }
