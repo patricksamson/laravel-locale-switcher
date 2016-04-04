@@ -3,7 +3,6 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
-[![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 A Simple Laravel middleware to easily load and switch the user's locale.
@@ -79,12 +78,10 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-version]: https://img.shields.io/packagist/v/lykegenes/laravel-locale-switcher.svg?style=flat-square
 [ico-license]: https://img.shields.io/packagist/l/lykegenes/laravel-locale-switcher.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/Lykegenes/laravel-locale-switcher/master.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/lykegenes/laravel-locale-switcher.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/lykegenes/laravel-locale-switcher.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/lykegenes/laravel-locale-switcher
 [link-travis]: https://travis-ci.org/Lykegenes/laravel-locale-switcher
-[link-code-quality]: https://scrutinizer-ci.com/g/lykegenes/laravel-locale-switcher
 [link-downloads]: https://packagist.org/packages/lykegenes/laravel-locale-switcher
 [link-author]: https://github.com/lykegenes
 [link-contributors]: ../../contributors
