@@ -25,8 +25,8 @@ return [
     'source_drivers' => [
         Lykegenes\LocaleSwitcher\Drivers\RouteParameterDriver::class, // Laravel Route parameter
         // Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class, // URL query string
-        // Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class, // Cookie
-        // Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class, // Laravel Session
+        // Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class, // Cookie (you might want to set store_driver)
+        // Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class, // Laravel Session (you might want to set store_driver)
         // Lykegenes\LocaleSwitcher\Drivers\BrowserDriver::class, // Browser Accept-Language header
     ],
 
