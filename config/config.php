@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    /**
+return [
+    /*
      *--------------------------------------------------------------------------
      * LocaleSwitcher Settings
      *--------------------------------------------------------------------------
@@ -11,21 +11,53 @@ return array(
      */
     'enabled' => true,
 
-    /**
+    /*
      *--------------------------------------------------------------------------
-     * LocaleSwitcher URL parameter key prefix
+     * LocaleSwitcher Source Drivers
      *--------------------------------------------------------------------------
      *
-     * Sometimes you want to set the URL parameter key to be used by LocaleSwitcher
-     * to use to detect locale switching requests.
-     * 
-     * By default, it is "locale", so the URL will be :
-     *     http://my-app.com/some/page/?locale=en
+     * These are the drivers that will be used to determine the current Locale.
+     *
+     * The Drivers will be used in this order, and if no locale is found,
+     * the Application default locale will be used.
      *
      */
-    'URL_param_key' => 'locale',
+    'source_drivers' => [
+        Lykegenes\LocaleSwitcher\Drivers\RouteParameterDriver::class, // Laravel Route parameter
+        // Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class, // URL query string
+        // Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class, // Cookie
+        // Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class, // Laravel Session
+        // Lykegenes\LocaleSwitcher\Drivers\BrowserDriver::class, // Browser Accept-Language header
+    ],
 
-    /**
+    /*
+     *--------------------------------------------------------------------------
+     * LocaleSwitcher Store Driver
+     *--------------------------------------------------------------------------
+     *
+     * This is the driver that will be used to store the locale for future requests.
+     * It is set to null by default in order to detect the locale on every request.
+     * Only one can be used!
+     *
+     * The included drivers are :
+     * Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class,
+     * Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class,
+     *
+     */
+    'store_driver' => null,
+
+    /*
+     *--------------------------------------------------------------------------
+     * LocaleSwitcher Driver Key
+     *--------------------------------------------------------------------------
+     *
+     * This key will be used by all the included drivers to detect and store
+     * the locale across requests.
+     *
+     */
+    'default_key' => 'locale',
+
+    /*
      *--------------------------------------------------------------------------
      * Enabled Locales
      *--------------------------------------------------------------------------
@@ -39,4 +71,4 @@ return array(
         'fr' => 'Français',
     ],
 
-);
+];

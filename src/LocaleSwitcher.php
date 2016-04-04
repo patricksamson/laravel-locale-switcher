@@ -2,201 +2,95 @@
 
 namespace Lykegenes\LocaleSwitcher;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Illuminate\Foundation\Application;
+use Lykegenes\LocaleSwitcher\Drivers\BaseDriver;
 
 class LocaleSwitcher
 {
+    protected $app;
     /**
      * The current LocaleSwitcher config.
      *
-     * @var \Lykegenes\LocaleSwitcher\CurrentConfig
+     * @var \Lykegenes\LocaleSwitcher\ConfigManager
      */
-    protected $currentConfig;
+    protected $config;
 
     /**
-     * The session used by the guard.
+     * The detected locale.
      *
-     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+     * @var string|null
      */
-    protected $session;
-
-    /**
-     * The request instance.
-     *
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    protected $request;
-
-    /**
-     * The request instance.
-     *
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    protected $localeWasSwitched = false;
-
-    /**
-     * The name of the "created at" column.
-     *
-     * @var string
-     */
-    const SESSION_KEY = 'locale';
-
-    /**
-     * The name of the "created at" column.
-     *
-     * @var string
-     */
-    const REQUEST_KEY = 'locale';
-
-    /**
-     * The name of the "created at" column.
-     *
-     * @var string
-     */
-    const COOKIE_KEY = 'locale';
+    protected $locale = null;
 
     /**
      * Create a new locale switcher.
-     *
-     * @param  \Symfony\Component\HttpFoundation\Session\SessionInterface $session
-     * @param  \Symfony\Component\HttpFoundation\Request                  $request
-     * @return void
      */
-    public function __construct(SessionInterface $session, Request $request = null, CurrentConfig $currentConfig = null)
+    public function __construct(Application $app, ConfigManager $config)
     {
-        $this->session = $session;
-        $this->request = $request;
-        $this->currentConfig = $currentConfig;
+        $this->app = $app;
+        $this->config = $config;
     }
 
     /**
-     * Get an array of ll the enabled locales.
+     * Attempt to detected the new locale from the enabled drivers.
      *
-     * @return array
+     * @return string|null The locale that should now be used.
      */
-    public function getEnabledLocales()
+    public function detectLocale()
     {
-        return $this->currentConfig->getEnabledLocales();
-    }
+        $sourceDrivers = $this->config->getSourceDrivers();
+        $key = $this->config->getDefaultKey();
 
-    /**
-     * Determine if the current user is authenticated.
-     *
-     * @return bool
-     */
-    public function sessionHasLocale()
-    {
-        return $this->session->has(static::SESSION_KEY);
-    }
+        if ( ! empty($sourceDrivers) && is_string($key)) {
+            foreach ($sourceDrivers as $driver) {
+                $driver = class_exists($driver) ? $this->app->make($driver) : null;
 
-    /**
-     * Determine if the current user is authenticated.
-     *
-     * @return bool
-     */
-    public function requestHasLocale()
-    {
-        return $this->request->has(static::REQUEST_KEY);
-    }
+                if ($driver instanceof BaseDriver && $driver->has($key)) {
+                    $newLocale = $driver->get($key);
+                    if ($this->config->isEnabledLocale($newLocale)) {
+                        $this->locale = $newLocale;
 
-    /**
-     * Determine if the current user is authenticated.
-     *
-     * @return bool
-     */
-    public function cookieHasLocale()
-    {
-        return $this->request->hasCookie(static::COOKIE_KEY);
-    }
-
-    /**
-     * Determine if the current user is authenticated.
-     *
-     * @return bool
-     */
-    public function setSessionLocale($locale)
-    {
-        return $this->session->put(static::SESSION_KEY, $locale);
-    }
-
-    /**
-     * Determine if the current user is authenticated.
-     *
-     * @return bool
-     */
-    public function getLocaleFromSession($default = null)
-    {
-        return $this->session->get(static::SESSION_KEY, $default);
-    }
-
-    /**
-     * Determine if the current user is authenticated.
-     *
-     * @return bool
-     */
-    public function getLocaleFromRequest($default = null)
-    {
-        return $this->request->input(static::REQUEST_KEY, $default);
-    }
-
-    /**
-     * Determine if the current user is authenticated.
-     *
-     * @return bool
-     */
-    public function getLocaleFromCookie($default = null)
-    {
-        return $this->request->cookie(static::COOKIE_KEY, $default);
-    }
-
-    /**
-     * Determine if the current user is authenticated.
-     *
-     * @return bool
-     */
-    public function localeWasSwitched()
-    {
-        return $this->localeWasSwitched;
-    }
-
-    /**
-     * Switch locale in the current user's session.
-     *
-     * @param  string      $default The default locale to use
-     * @return string|null The locale that should now be used
-     */
-    public function switchLocale($default = null)
-    {
-        // returns the first non-null value
-        $locale = $this->getLocaleFromRequest()
-            ?: $this->getLocaleFromCookie()
-            ?: $default;
-
-        if ($locale !== null && $this->currentConfig->isEnabledLocale($locale)) {
-            $this->setSessionLocale($locale);
-            $this->localeWasSwitched = true;
+                        return $newLocale;
+                    }
+                }
+            }
         }
+    }
 
-        return $locale;
+    public function storeLocale()
+    {
+        $storeDriver = $this->config->getStoreDriver();
+        $key = $this->config->getDefaultKey();
+
+        if ($this->locale !== null && ! empty($storeDriver)) {
+            $storeDriver = $this->app->make($storeDriver);
+
+            if ($storeDriver instanceof BaseDriver) {
+                $storeDriver->store($key, $this->locale);
+
+                return $this->locale;
+            }
+        }
     }
 
     /**
-     * Attempt to authenticate using HTTP Basic Auth.
+     * Attempt to detect and switch the current locale.
      *
-     * @param  string                                            $field
-     * @return \Symfony\Component\HttpFoundation\Response|null
+     * @return string|null The detected locale or null
      */
     public function setAppLocale()
     {
-        $this->switchLocale();
+        // Detect the current locale from enabled drivers
+        $this->detectLocale();
 
-        if ($this->sessionHasLocale()) {
-            $locale = $this->session->get(static::SESSION_KEY);
-            App::setLocale($locale);
+        // Store the current locale for future requests
+        $this->storeLocale();
 
-            return $locale;
+        // Set the locale for this current request
+        if ($this->locale !== null) {
+            $this->app->setLocale($this->locale);
         }
+
+        return $this->locale;
     }
 };

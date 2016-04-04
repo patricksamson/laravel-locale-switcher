@@ -7,21 +7,39 @@ php:
   - 7.0
   - hhvm
 
-addons:
-  code_climate:
-    repo_token: e9d8026b4a1ca0f1c3577c3772bbe9d8d337f0cb2ee50642d2047efa8a148327
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+env:
+  global:
+    - setup=basic
+    - COMPOSER_DISCARD_CHANGES=true
+    - COMPOSER_NO_INTERACTION=1
+    - COMPOSER_DISABLE_XDEBUG_WARN=1
+
+matrix:
+  include:
+    - php: 5.6
+      env: setup=lowest
+    - php: 5.6
+      env: setup=stable
 
 before_install:
-  - travis_retry composer self-update
+  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
+  - composer self-update && composer -V
 
 install:
-  - travis_retry composer install --prefer-source --no-interaction
+  - if [[ $setup = 'basic' ]]; then travis_retry composer update --prefer-dist; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --prefer-stable --prefer-lowest; fi
 
 script:
-  - phpunit --coverage-clover build/logs/clover.xml
+  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
-after_script:
-  - vendor/bin/test-reporter
+after_success:
+  - travis_retry php vendor/bin/coveralls
 
 notifications:
   email:

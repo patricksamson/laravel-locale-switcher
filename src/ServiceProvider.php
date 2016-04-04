@@ -2,6 +2,9 @@
 
 namespace Lykegenes\LocaleSwitcher;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
@@ -13,8 +16,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register()
     {
@@ -31,8 +32,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         if (! $enabled) {
             return;
         }
-
-        $this->registerMiddleware('Lykegenes\LocaleSwitcher\Middleware\SwitchLocale');
     }
 
     /**
@@ -61,16 +60,5 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     protected function publishConfig($configPath)
     {
         $this->publishes([$configPath => config_path('locale-switcher.php')], 'config');
-    }
-
-    /**
-     * Register the Debugbar Middleware.
-     *
-     * @param string $middleware
-     */
-    protected function registerMiddleware($middleware)
-    {
-        $kernel = $this->app['Illuminate\Contracts\Http\Kernel'];
-        $kernel->pushMiddleware($middleware);
     }
 }
