@@ -77,7 +77,7 @@ HTML::ul(LocaleSwitcher::getEnabledLocales());
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
 [ico-version]: https://img.shields.io/packagist/v/lykegenes/laravel-locale-switcher.svg
-[ico-license]: https://img.shields.io/packagist/l/lykegenes/laravel-locale-switcher.svg
+[ico-license]: https://img.shields.io/github/license/lykegenes/laravel-locale-switcher.svg
 [ico-travis]: https://img.shields.io/travis/Lykegenes/laravel-locale-switcher/master.svg
 [ico-coveralls]: https://img.shields.io/coveralls/Lykegenes/laravel-locale-switcher/master.svg
 [ico-downloads]: https://img.shields.io/packagist/dt/lykegenes/laravel-locale-switcher.svg
