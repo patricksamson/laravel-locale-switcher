@@ -5,7 +5,7 @@ sudo: false
 php:
   - 5.6
   - 7.0
-  - hhvm
+  - 7.1
 
 cache:
   directories:
@@ -14,26 +14,33 @@ cache:
 
 env:
   global:
-    - setup=basic
     - COMPOSER_DISCARD_CHANGES=true
     - COMPOSER_NO_INTERACTION=1
     - COMPOSER_DISABLE_XDEBUG_WARN=1
+    - ILLUMINATE_VERSION=5.1.*
 
 matrix:
   include:
     - php: 5.6
-      env: setup=lowest
+      env: ILLUMINATE_VERSION=5.1.*
     - php: 5.6
-      env: setup=stable
+      env: ILLUMINATE_VERSION=5.2.*
+    - php: 5.6
+      env: ILLUMINATE_VERSION=5.3.*
+    - php: 7.0
+      env: ILLUMINATE_VERSION=5.1.*
+    - php: 7.0
+      env: ILLUMINATE_VERSION=5.2.*
+    - php: 7.0
+      env: ILLUMINATE_VERSION=5.3.*
 
 before_install:
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - composer self-update && composer -V
+  - composer require "illuminate/support:${ILLUMINATE_VERSION}" --no-update -v
 
 install:
-  - if [[ $setup = 'basic' ]]; then travis_retry composer update --prefer-dist; fi
-  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --prefer-stable; fi
-  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --prefer-stable --prefer-lowest; fi
+  - travis_retry composer update --prefer-dist
 
 script:
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
