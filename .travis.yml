@@ -40,7 +40,7 @@ before_install:
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - composer self-update && composer -V
   - composer require "illuminate/support:${ILLUMINATE_VERSION}" --no-update -v
-  - composer require "orchestral/testbench:${TESTBENCH_VERSION}" --no-update -v
+  - composer require "orchestra/testbench:${TESTBENCH_VERSION}" --no-update -v
 
 install:
   - travis_retry composer update --prefer-dist
