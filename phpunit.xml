@@ -27,5 +27,10 @@
     </filter>
     <php>
         <env name="APP_KEY" value="base64:s6jZUMSFLvt69UTtntwLBUIBKLHCtZe7ScH52Er4y0k="/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+        <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
     </php>
 </phpunit>
