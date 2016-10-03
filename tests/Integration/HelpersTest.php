@@ -7,7 +7,8 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param \Illuminate\Foundation\Application $app
+     *
      * @return array
      */
     protected function getPackageProviders($app)
@@ -31,7 +32,6 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
             'as' => 'route-parameter',
             'middleware' => [
                 \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class,
-                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             ],
             'uses' => TestHelperController::$route_parameter,
         ]);
@@ -41,7 +41,6 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
             'as' => 'route-querystring',
             'middleware' => [
                 \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class,
-                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             ],
             'uses' => TestHelperController::$route_querystring,
         ]);
@@ -51,7 +50,6 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
             'as' => 'named-switch-locale',
             'middleware' => [
                 \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class,
-                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             ],
             'uses' => TestHelperController::$named_switch_locale,
         ]);
@@ -59,7 +57,6 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
         $app['router']->get('action/{newLocale}', [
             'middleware' => [
                 \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class,
-                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             ],
             'uses' => TestHelperController::$action_switch_locale,
         ]);
@@ -67,7 +64,6 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
         $app['router']->get('closure/{newLocale}', [
             'middleware' => [
                 \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class,
-                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             ],
             function ($newLocale) {
                 return 'hello world, url is : '.switch_locale($newLocale);

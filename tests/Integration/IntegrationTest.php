@@ -7,7 +7,8 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param \Illuminate\Foundation\Application $app
+     *
      * @return array
      */
     protected function getPackageProviders($app)
@@ -29,7 +30,6 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
         $app['router']->get('locale', [
             'middleware' => [
                 \Lykegenes\LocaleSwitcher\Middleware\SwitchLocaleMiddleware::class,
-                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             ],
             function () {
                 return 'hello world, locale is : '.\App::getLocale();
@@ -76,17 +76,6 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
     /**
      * @test
      */
-    public function testDetectLocaleFromCookie()
-    {
-        $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class]);
-
-        $this->makeRequest('GET', 'locale', [], ['locale' => 'fr'])
-             ->see('hello world, locale is : fr');
-    }
-
-    /**
-     * @test
-     */
     public function testDetectLocaleFromRouteParameter()
     {
         $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RouteParameterDriver::class]);
@@ -119,23 +108,5 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
         $this->makeRequest('GET', 'locale', ['locale' => 'en'])
              ->see('hello world, locale is : en')
              ->assertSessionHas('locale', 'en');
-    }
-
-    /**
-     * @test
-     */
-    public function testStoreLocaleInCookie()
-    {
-        $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
-        $this->app['config']->set('locale-switcher.store_driver', \Lykegenes\LocaleSwitcher\Drivers\CookieDriver::class);
-
-        $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
-             ->see('hello world, locale is : fr')
-             ->seeCookie('locale', 'fr');
-
-        // switch to new locale on subsequent request
-        $this->makeRequest('GET', 'locale', ['locale' => 'en'])
-             ->see('hello world, locale is : en')
-             ->seeCookie('locale', 'en');
     }
 }
