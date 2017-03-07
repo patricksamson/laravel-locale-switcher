@@ -2,13 +2,13 @@
 
 namespace Lykegenes\LocaleSwitcher\Drivers;
 
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Illuminate\Contracts\Session\Session;
 
 class SessionDriver extends BaseDriver
 {
     protected $session;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(Session $session)
     {
         $this->session = $session;
     }
