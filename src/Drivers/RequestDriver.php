@@ -15,11 +15,11 @@ class RequestDriver extends BaseDriver
 
     public function has($key)
     {
-        return $this->request->has($key);
+        return $this->request->query($key) != null;
     }
 
     public function get($key, $default = null)
     {
-        return $this->request->input($key, $default);
+        return $this->request->query($key, $default);
     }
 }

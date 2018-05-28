@@ -81,8 +81,8 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
         $this->app['config']->set('app.locale', 'fr');
         $this->assertEquals('http://localhost/fr/something', route_localized('route-parameter'));
 
-        $this->makeRequest('GET', route_localized('route-parameter'))
-             ->see('hello world, locale is : fr');
+        $this->get(route_localized('route-parameter'))
+             ->assertSee('hello world, locale is : fr');
     }
 
     /**
@@ -95,8 +95,8 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
         $this->app['config']->set('app.locale', 'fr');
         $this->assertEquals('http://localhost/something?locale=fr', route_localized('route-querystring'));
 
-        $this->makeRequest('GET', route_localized('route-querystring'))
-             ->see('hello world, locale is : fr');
+        $this->get(route_localized('route-querystring'))
+             ->assertSee('hello world, locale is : fr');
     }
 
     /**
@@ -109,8 +109,8 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
         $this->app['config']->set('app.locale', 'fr');
         $this->assertEquals('http://localhost/fr/something', action_localized(TestHelperController::$route_parameter));
 
-        $this->makeRequest('GET', action_localized(TestHelperController::$route_parameter))
-             ->see('hello world, locale is : fr');
+        $this->get(action_localized(TestHelperController::$route_parameter))
+             ->assertSee('hello world, locale is : fr');
     }
 
     /**
@@ -123,8 +123,8 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
         $this->app['config']->set('app.locale', 'fr');
         $this->assertEquals('http://localhost/something?locale=fr', action_localized(TestHelperController::$route_querystring));
 
-        $this->makeRequest('GET', action_localized(TestHelperController::$route_querystring))
-             ->see('hello world, locale is : fr');
+        $this->get(action_localized(TestHelperController::$route_querystring))
+             ->assertSee('hello world, locale is : fr');
     }
 
     /**
@@ -133,16 +133,16 @@ class HelpersTest extends \Orchestra\Testbench\TestCase
     public function testSwitchLocaleHelperWithQueryString()
     {
         // Query string has to be appended
-        $this->makeRequest('GET', route_localized('named-switch-locale', ['newLocale' => 'fr']))
-             ->see('http://localhost/named/fr?locale=fr');
+        $this->get(route_localized('named-switch-locale', ['newLocale' => 'fr']))
+             ->assertSee('http://localhost/named/fr?locale=fr');
 
         // Query String has to be appended
-        $this->makeRequest('GET', action_localized(TestHelperController::$action_switch_locale, ['newLocale' => 'fr']))
-             ->see('http://localhost/action/fr?locale=fr');
+        $this->get(action_localized(TestHelperController::$action_switch_locale, ['newLocale' => 'fr']))
+             ->assertSee('http://localhost/action/fr?locale=fr');
 
         // We can't match a Closure. Return the exact same urkl, without the query string
-        $this->makeRequest('GET', '/closure/fr')
-             ->see('http://localhost/closure/fr');
+        $this->get('/closure/fr')
+             ->assertSee('http://localhost/closure/fr');
     }
 }
 

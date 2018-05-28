@@ -23,6 +23,6 @@ class RouteParameterDriver extends BaseDriver
 
     public function get($key, $default = null)
     {
-        return $this->currentroute->getParameter($key, $default);
+        return $this->currentroute->parameter($key, $default);
     }
 }

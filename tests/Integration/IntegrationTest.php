@@ -42,8 +42,8 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
      */
     public function testGetLocaleRoute()
     {
-        $this->visit('locale')
-             ->see('hello world, locale is : en');
+        $this->get('locale')
+             ->assertSee('hello world, locale is : en');
     }
 
     /**
@@ -53,12 +53,12 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
     {
         $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
 
-        $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
-             ->see('hello world, locale is : fr');
+        $this->get('locale?locale=fr')
+             ->assertSee('hello world, locale is : fr');
 
         // switch to new locale on subsequent request
-        $this->makeRequest('GET', 'locale', ['locale' => 'en'])
-             ->see('hello world, locale is : en');
+        $this->get('locale?locale=en')
+             ->assertSee('hello world, locale is : en');
     }
 
     /**
@@ -69,8 +69,12 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
         $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class]);
 
         $this->withSession(['locale' => 'fr'])
-             ->visit('locale')
-             ->see('hello world, locale is : fr');
+             ->get('locale')
+             ->assertSee('hello world, locale is : fr');
+
+        $this->withSession(['locale' => 'en'])
+            ->get('locale')
+            ->assertSee('hello world, locale is : en');
     }
 
     /**
@@ -84,12 +88,12 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
             return 'hello world, locale is : '.\App::getLocale();
         }]);
 
-        $this->visit('fr/parametertest')
-             ->see('hello world, locale is : fr');
+        $this->get('fr/parametertest')
+             ->assertSee('hello world, locale is : fr');
 
         // switch to new locale on subsequent request
-        $this->visit('en/parametertest')
-             ->see('hello world, locale is : en');
+        $this->get('en/parametertest')
+             ->assertSee('hello world, locale is : en');
     }
 
     /**
@@ -100,13 +104,13 @@ class IntegrationTest extends \Orchestra\Testbench\TestCase
         $this->app['config']->set('locale-switcher.source_drivers', [\Lykegenes\LocaleSwitcher\Drivers\RequestDriver::class]);
         $this->app['config']->set('locale-switcher.store_driver', \Lykegenes\LocaleSwitcher\Drivers\SessionDriver::class);
 
-        $this->makeRequest('GET', 'locale', ['locale' => 'fr'])
-             ->see('hello world, locale is : fr')
+        $this->get('locale?locale=fr')
+             ->assertSee('hello world, locale is : fr')
              ->assertSessionHas('locale', 'fr');
 
         // switch to new locale on subsequent request
-        $this->makeRequest('GET', 'locale', ['locale' => 'en'])
-             ->see('hello world, locale is : en')
+        $this->get('locale?locale=en')
+             ->assertSee('hello world, locale is : en')
              ->assertSessionHas('locale', 'en');
     }
 }

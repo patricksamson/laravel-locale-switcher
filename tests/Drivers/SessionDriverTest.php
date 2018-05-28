@@ -18,7 +18,7 @@ class SessionDriverTest extends Orchestra\Testbench\TestCase
     {
         parent::setUp();
 
-        $this->session = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $this->session = Mockery::mock('Illuminate\Contracts\Session\Session');
 
         $this->sessionDriver = new SessionDriver($this->session);
     }
