@@ -3,14 +3,12 @@ language: php
 sudo: false
 
 php:
+  - 7.0
   - 7.1
   - 7.2
 
 env:
   matrix:
-    - TESTBENCH_VERSION=3.2.*
-    - TESTBENCH_VERSION=3.3.*
-    - TESTBENCH_VERSION=3.4.*
     - TESTBENCH_VERSION=3.5.*
     - TESTBENCH_VERSION=3.6.*
   global:
