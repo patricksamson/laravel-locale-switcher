@@ -12,6 +12,7 @@ env:
     - TESTBENCH_VERSION=3.5.*
     - TESTBENCH_VERSION=3.6.*
     - TESTBENCH_VERSION=3.7.*
+    - TESTBENCH_VERSION=3.8.*
   global:
     - COMPOSER_DISCARD_CHANGES=true
     - COMPOSER_NO_INTERACTION=1
@@ -19,7 +20,7 @@ env:
 
 matrix:
   allow_failures:
-    - env: TESTBENCH_VERSION=3.7.*
+    - env: TESTBENCH_VERSION=3.8.*
 
 before_install:
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
