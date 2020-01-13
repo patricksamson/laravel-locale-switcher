@@ -14,7 +14,7 @@ class SessionDriverTest extends Orchestra\Testbench\TestCase
      */
     protected $sessionDriver;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -23,7 +23,7 @@ class SessionDriverTest extends Orchestra\Testbench\TestCase
         $this->sessionDriver = new SessionDriver($this->session);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
