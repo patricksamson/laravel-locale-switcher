@@ -16,7 +16,7 @@ Via Composer
 composer require lykegenes/laravel-locale-switcher
 ```
 
-Then, add this to your Service Providers :
+Then, add this to your Service Providers (It should be done automa) :
 ``` php
 Lykegenes\LocaleSwitcher\ServiceProvider::class,
 ```

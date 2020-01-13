@@ -14,7 +14,7 @@ class RequestDriverTest extends Orchestra\Testbench\TestCase
      */
     protected $requestDriver;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -23,7 +23,7 @@ class RequestDriverTest extends Orchestra\Testbench\TestCase
         $this->requestDriver = new RequestDriver($this->request);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

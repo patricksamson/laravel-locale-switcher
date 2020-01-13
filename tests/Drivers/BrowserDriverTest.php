@@ -19,7 +19,7 @@ class BrowserDriverTest extends Orchestra\Testbench\TestCase
      */
     protected $browserDriver;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -29,7 +29,7 @@ class BrowserDriverTest extends Orchestra\Testbench\TestCase
         $this->browserDriver = new BrowserDriver($this->request, $this->configManager);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
