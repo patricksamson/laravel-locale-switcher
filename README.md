@@ -7,6 +7,16 @@
 
 A Simple Laravel middleware to easily load and switch the user's locale.
 
+## Version Compatibility
+
+ Laravel  | Laravel Locale Switcher
+:---------|:----------
+ 5.x      | 1.5.x
+ 6.x      | 6.x
+ 7.x      | 7.x
+ 8.x      | 8.x
+
+
 ## Install
 
 Via Composer
