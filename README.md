@@ -15,6 +15,7 @@ A Simple Laravel middleware to easily load and switch the user's locale.
  6.x      | 6.x
  7.x      | 7.x
  8.x      | 8.x
+ 9.x      | 9.x
 
 
 ## Install

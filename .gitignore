@@ -4,3 +4,6 @@
 
 # PHPUnit
 /.phpunit.result.cache
+
+# IDE
+/.idea
