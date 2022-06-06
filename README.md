@@ -88,7 +88,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [ico-version]: https://img.shields.io/packagist/v/lykegenes/laravel-locale-switcher.svg
 [ico-license]: https://img.shields.io/github/license/patricksamson/laravel-locale-switcher.svg
-[ico-github-action]: https://github.com/patricksamson/laravel-locale-switcher/workflows/Run%20Tests/badge.svg?branch=8.x
+[ico-github-action]: https://github.com/patricksamson/laravel-locale-switcher/workflows/Run%20Tests/badge.svg?branch=9.x
 [ico-downloads]: https://img.shields.io/packagist/dt/lykegenes/laravel-locale-switcher.svg
 
 [link-packagist]: https://packagist.org/packages/lykegenes/laravel-locale-switcher
